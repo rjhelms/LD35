@@ -70,3 +70,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Standard Assets
+/Assets/Standard Assets/
+/Assets/Editor/ImageEffects
