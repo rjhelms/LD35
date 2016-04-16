@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using System.Collections;
 
-public class GameController : MonoBehaviour {
+public class GameController : MonoBehaviour
+{
     public Material RenderMaterial;
     public Camera WorldCamera;
 
     public int TargetX = 320;
     public int TargetY = 200;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         float pixelRatioAdjustment = (float)TargetX / (float)TargetY;
         if (pixelRatioAdjustment <= 1)
         {
@@ -27,9 +26,10 @@ public class GameController : MonoBehaviour {
             WorldCamera.orthographicSize = TargetX / 2;
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 }
