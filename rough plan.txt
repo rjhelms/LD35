@@ -1,0 +1,35 @@
+player is:  robot
+goal is:    escaping from labratory
+
+find different parts - each part is a different shape/ability
+as time goes on, also get ability to use more than one
+- ie:
+    heads (sensors)
+    tools (abilities)
+    chassis (locomotion)
+    
+turn based - rogue like - top down
+
+sensors:
+    - default (ahead - cone or somesuch)
+    - omni (all directions)
+    - long range (ahead - farther distance)
+    - infrared (ahead - see through walls)
+    
+tools:
+    - weapon
+    - actuator (open doors / interact)
+    - ???
+    
+chassis:
+    - default (one tile)
+    - silent (undetected by scientists out of sight)
+    - fast (two (three?) moves a turn)
+    - treads (over small obstacles)
+    
+total sprite size: 31 x 24
+
+colours:
+
+00. 55. AA. FF. = 2 bits
+for each channel
