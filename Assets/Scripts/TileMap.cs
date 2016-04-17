@@ -31,7 +31,8 @@ public class Tile
         if (Contents == TileContents.EMPTY_TILE)
         {
             return true;
-        } else
+        }
+        else
         {
             return false;
         }
@@ -43,21 +44,14 @@ public class TileMap
 
     public Tile[,] TileArray;
 
-    public TileMap()
+    public TileMap(int x_size, int y_size)
     {
-        TileArray = new Tile[11, 11];
-        for (int x = 0; x < 11; x++)
+        TileArray = new Tile[x_size, y_size];
+        for (int x = 0; x < x_size; x++)
         {
-            for (int y = 0; y < 11; y++)
+            for (int y = 0; y < y_size; y++)
             {
-                if (x < 3 | x > 7 | y < 3 | y > 7)
-                {
-                    TileArray[x, y] = new Tile(TileContents.WALL);
-                }
-                else
-                {
-                    TileArray[x, y] = new Tile(TileContents.EMPTY_TILE);
-                }
+                TileArray[x, y] = new Tile(TileContents.EMPTY_TILE);
             }
         }
     }

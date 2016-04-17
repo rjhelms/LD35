@@ -470,6 +470,49 @@ Transform:
   - {fileID: 1853376035}
   m_Father: {fileID: 0}
   m_RootOrder: 1
+--- !u!1 &720029708
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 720029710}
+  - 114: {fileID: 720029709}
+  m_Layer: 0
+  m_Name: LevelLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &720029709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 720029708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 610df5889af242d4c90a69062ca830dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Levels:
+  - {fileID: 4900000, guid: 7de2786381a388f4882e34561b1597a4, type: 3}
+  LevelFolder: Levels
+  Controller: {fileID: 1554982843}
+--- !u!4 &720029710
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 720029708}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 9.94278, y: 30.97195, z: -74.87283}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
 --- !u!1 &724078932
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,8 +812,8 @@ MonoBehaviour:
   WorldCamera: {fileID: 1958461350}
   TargetX: 320
   TargetY: 200
-  PlayerXPos: 5
-  PlayerYPos: 5
+  PlayerXPos: 10
+  PlayerYPos: 10
   XSpriteOffset: 16
   XSpriteSize: 32
   YSpriteOffset: 13
@@ -778,6 +821,11 @@ MonoBehaviour:
   PrefabTileSprite: {fileID: 102722, guid: a2471701772e29340bf396e07b4373d7, type: 2}
   VisibleSpritesParent: {fileID: 724078933}
   EGAMode: 1
+  PlayerSprites:
+  - {fileID: 21300000, guid: bdf8c757ce2a95141abcb5474536ff51, type: 3}
+  - {fileID: 21300002, guid: bdf8c757ce2a95141abcb5474536ff51, type: 3}
+  - {fileID: 21300004, guid: bdf8c757ce2a95141abcb5474536ff51, type: 3}
+  - {fileID: 21300006, guid: bdf8c757ce2a95141abcb5474536ff51, type: 3}
 --- !u!4 &1554982844
 Transform:
   m_ObjectHideFlags: 0
@@ -942,7 +990,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0.019607844}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0.019607844}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0

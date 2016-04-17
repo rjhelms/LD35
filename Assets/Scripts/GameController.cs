@@ -9,8 +9,8 @@ public class GameController : MonoBehaviour
     public int TargetX = 320;
     public int TargetY = 200;
 
-    public int PlayerXPos = 5;
-    public int PlayerYPos = 5;
+    public int PlayerXPos;
+    public int PlayerYPos;
 
     public int XSpriteOffset = 16;
     public int XSpriteSize = 32;
@@ -33,7 +33,6 @@ public class GameController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        TileMap = new TileMap();
         sensor = new DirectionalSensor(TileMap);
         VisibleSprites = new SpriteRenderer[7, 7];
         spriteDefinitions = FindObjectOfType<SpriteDefinitions>();
