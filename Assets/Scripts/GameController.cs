@@ -51,40 +51,9 @@ public class GameController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        sensor = new DirectionalSensor(TileMap);
-        VisibleSprites = new SpriteRenderer[7, 7];
         spriteDefinitions = FindObjectOfType<SpriteDefinitions>();
-        direction = Direction.NORTH;
-        sensorState = SensorState.BASIC;
-        headSpriteArray = spriteDefinitions.EGADirectionalHead;
-        for (int x = 0; x < 7; x++)
-        {
-            for (int y = 0; y < 7; y++)
-            {
-                float spriteX = XSpriteOffset + (XSpriteSize * x);
-                float spriteY = YSpriteOffset + (YSpriteSize * y);
-                GameObject o = (GameObject)Instantiate(PrefabTileSprite, new Vector3(spriteX, spriteY), Quaternion.identity);
-                SpriteRenderer newSprite = o.GetComponent<SpriteRenderer>();
-                newSprite.sprite = spriteDefinitions.EGAInvisibleSprites[(int)TileContents.EMPTY_TILE];
-                newSprite.transform.parent = VisibleSpritesParent;
-                VisibleSprites[x, y] = newSprite;
-            }
-        }
-
-        float pixelRatioAdjustment = (float)TargetX / (float)TargetY;
-        if (pixelRatioAdjustment <= 1)
-        {
-            RenderMaterial.mainTextureScale = new Vector2(pixelRatioAdjustment, 1);
-            RenderMaterial.mainTextureOffset = new Vector2((1 - pixelRatioAdjustment) / 2, 0);
-            WorldCamera.orthographicSize = TargetY / 2;
-        }
-        else
-        {
-            pixelRatioAdjustment = 1f / pixelRatioAdjustment;
-            RenderMaterial.mainTextureScale = new Vector2(1, pixelRatioAdjustment);
-            RenderMaterial.mainTextureOffset = new Vector2(0, (1 - pixelRatioAdjustment) / 2);
-            WorldCamera.orthographicSize = TargetX / 2;
-        }
+        InitializePlayer();
+        InitializeUI();
     }
 
     // Update is called once per frame
@@ -211,6 +180,52 @@ public class GameController : MonoBehaviour
             PlayerXPos = new_x_pos;
             PlayerYPos = new_y_pos;
         }
-
     }
+
+    #region Private Methods
+
+    private void InitializePlayer()
+    {
+        direction = Direction.NORTH;
+        sensorState = SensorState.BASIC;
+        sensor = new DirectionalSensor(TileMap);
+        headSpriteArray = spriteDefinitions.EGADirectionalHead;
+        chassisState = ChassisState.FAST;
+        chassis = new Chassis(chassisState);
+    }
+
+    private void InitializeUI()
+    {
+        VisibleSprites = new SpriteRenderer[7, 7];
+        for (int x = 0; x < 7; x++)
+        {
+            for (int y = 0; y < 7; y++)
+            {
+                float spriteX = XSpriteOffset + (XSpriteSize * x);
+                float spriteY = YSpriteOffset + (YSpriteSize * y);
+                GameObject o = (GameObject)Instantiate(PrefabTileSprite, new Vector3(spriteX, spriteY), Quaternion.identity);
+                SpriteRenderer newSprite = o.GetComponent<SpriteRenderer>();
+                newSprite.sprite = spriteDefinitions.EGAInvisibleSprites[(int)TileContents.EMPTY_TILE];
+                newSprite.transform.parent = VisibleSpritesParent;
+                VisibleSprites[x, y] = newSprite;
+            }
+        }
+
+        float pixelRatioAdjustment = (float)TargetX / (float)TargetY;
+        if (pixelRatioAdjustment <= 1)
+        {
+            RenderMaterial.mainTextureScale = new Vector2(pixelRatioAdjustment, 1);
+            RenderMaterial.mainTextureOffset = new Vector2((1 - pixelRatioAdjustment) / 2, 0);
+            WorldCamera.orthographicSize = TargetY / 2;
+        }
+        else
+        {
+            pixelRatioAdjustment = 1f / pixelRatioAdjustment;
+            RenderMaterial.mainTextureScale = new Vector2(1, pixelRatioAdjustment);
+            RenderMaterial.mainTextureOffset = new Vector2(0, (1 - pixelRatioAdjustment) / 2);
+            WorldCamera.orthographicSize = TargetX / 2;
+        }
+    }
+
+    #endregion
 }
