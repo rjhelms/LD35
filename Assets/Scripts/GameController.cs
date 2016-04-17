@@ -98,7 +98,29 @@ public class GameController : MonoBehaviour
             sensorState = SensorState.LONGRANGE;
             headSpriteArray = spriteDefinitions.EGALongRangeHead;
         }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            chassisState = ChassisState.BASIC;
+            chassis = new Chassis(chassisState);
+        }
 
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            chassisState = ChassisState.SILENT;
+            chassis = new Chassis(chassisState);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            chassisState = ChassisState.FAST;
+            chassis = new Chassis(chassisState);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            chassisState = ChassisState.OFFROAD;
+            chassis = new Chassis(chassisState);
+        }
         foreach (Text text in SensorText)
         {
             text.color = InactiveColour;
@@ -132,6 +154,7 @@ public class GameController : MonoBehaviour
         }
 
         HeadSprite.sprite = headSpriteArray[(int)direction];
+        BodySprite.sprite = spriteDefinitions.EGAChassis[(int)chassisState];
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -207,7 +230,7 @@ public class GameController : MonoBehaviour
         sensorState = SensorState.BASIC;
         sensor = new DirectionalSensor(TileMap);
         headSpriteArray = spriteDefinitions.EGADirectionalHead;
-        chassisState = ChassisState.FAST;
+        chassisState = ChassisState.BASIC;
         chassis = new Chassis(chassisState);
     }
 
