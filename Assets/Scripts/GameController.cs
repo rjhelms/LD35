@@ -88,7 +88,7 @@ public class GameController : MonoBehaviour
             sensor = new OmniSensor(TileMap);
         }
 
-        sensor.Scan(PlayerXPos, PlayerYPos, Direction.NORTH);
+        sensor.Scan(PlayerXPos, PlayerYPos, this.direction);
         for (int x = 0; x < 7; x++)
         {
             for (int y = 0; y < 7; y++)
