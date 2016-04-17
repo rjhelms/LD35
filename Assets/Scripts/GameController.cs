@@ -24,7 +24,7 @@ public enum ToolState
     NONE,
     LASER,
     ACTUATOR,
-    PUSHER
+    PROBE
 }
 
 public enum GameState
@@ -351,7 +351,7 @@ public class GameController : MonoBehaviour
                     SetTool(ToolState.ACTUATOR);
                     break;
                 case 11:
-                    SetTool(ToolState.PUSHER);
+                    SetTool(ToolState.PROBE);
                     break;
             }
 

@@ -1043,7 +1043,7 @@ GameObject:
   - 222: {fileID: 775346912}
   - 114: {fileID: 775346911}
   m_Layer: 5
-  m_Name: PUSHER
+  m_Name: PROBE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1098,7 +1098,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: PUSHER
+  m_Text: PROBE
 --- !u!222 &775346912
 CanvasRenderer:
   m_ObjectHideFlags: 0
