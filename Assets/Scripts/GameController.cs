@@ -86,6 +86,11 @@ public class GameController : MonoBehaviour
             sensor = new IRSensor(TileMap);
         }
 
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            sensor = new LongRangeSensor(TileMap);
+        }
+
         sensor.Scan(PlayerXPos, PlayerYPos, this.direction);
         for (int x = 0; x < 7; x++)
         {
