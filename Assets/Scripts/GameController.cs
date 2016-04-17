@@ -113,6 +113,7 @@ public class GameController : MonoBehaviour
         {
             case GameState.MOVEMENT:
                 DoMovement();
+                UpdateMap();
                 break;
             case GameState.SELECTION:
                 DoSelection();
@@ -120,7 +121,6 @@ public class GameController : MonoBehaviour
         }
 
         UpdateUI();
-        UpdateMap();
 
     }
     #endregion
@@ -148,8 +148,6 @@ public class GameController : MonoBehaviour
             }
         }
 
-        HeadSprite.sprite = headSpriteArray[(int)direction];
-        BodySprite.sprite = spriteDefinitions.EGAChassis[(int)chassisState];
     }
 
     private void UpdateUI()
@@ -190,6 +188,7 @@ public class GameController : MonoBehaviour
         }
 
         CountText.text = String.Format("ACTIVE  {0}\r\nMAX     {1}", activeCount, maxCount);
+
         if (activeCount > maxCount)
         {
             CountText.color = ErrorColour;
@@ -198,6 +197,9 @@ public class GameController : MonoBehaviour
         {
             CountText.color = InactiveColour;
         }
+
+        HeadSprite.sprite = headSpriteArray[(int)direction];
+        BodySprite.sprite = spriteDefinitions.EGAChassis[(int)chassisState];
     }
 
     private void DoMovement()
@@ -283,7 +285,7 @@ public class GameController : MonoBehaviour
         {
             if (activeCount <= maxCount)
                 SetState(GameState.MOVEMENT);
-    }
+        }
         if (Input.GetKeyDown(KeyCode.DownArrow) | Input.GetKeyDown(KeyCode.S))
         {
             pointerPosition += 1;
