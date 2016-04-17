@@ -104,23 +104,65 @@ public class GameController : MonoBehaviour
                 }
             }
         }
+
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            this.direction--;
+            if (this.direction < Direction.NORTH)
+            {
+                this.direction = Direction.WEST;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            this.direction++;
+            if (this.direction > Direction.WEST)
+            {
+                this.direction = Direction.NORTH;
+            }
+        }
+
         int new_x_pos = PlayerXPos;
         int new_y_pos = PlayerYPos;
+        int forward_move = 0;
+        int lateral_move = 0;
         if (Input.GetKeyDown(KeyCode.W))
         {
-            new_y_pos++;
+            forward_move++;
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            new_y_pos--;
+            forward_move--;
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            new_x_pos--;
+            lateral_move--;
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            new_x_pos++;
+            lateral_move++;
+        }
+
+        switch (this.direction)
+        {
+            case Direction.NORTH:
+                new_y_pos += forward_move;
+                new_x_pos += lateral_move;
+                break;
+            case Direction.EAST:
+                new_x_pos += forward_move;
+                new_y_pos -= lateral_move;
+                break;
+            case Direction.SOUTH:
+                new_y_pos -= forward_move;
+                new_x_pos -= lateral_move;
+                break;
+            case Direction.WEST:
+                new_x_pos -= forward_move;
+                new_y_pos += lateral_move;
+                break;
         }
 
         if (TileMap.TileArray[new_x_pos, new_y_pos].CanEnter())
