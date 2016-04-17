@@ -74,6 +74,7 @@ public class GameController : MonoBehaviour
 
     public SpriteRenderer HeadSprite;
     public SpriteRenderer BodySprite;
+    public SpriteRenderer ToolSprite;
     #endregion
 
     #region Private Attributes
@@ -200,6 +201,15 @@ public class GameController : MonoBehaviour
 
         HeadSprite.sprite = headSpriteArray[(int)direction];
         BodySprite.sprite = spriteDefinitions.EGAChassis[(int)chassisState];
+        ToolSprite.sprite = spriteDefinitions.EGATool[(int)toolState];
+        if (direction == Direction.WEST | direction == Direction.SOUTH)
+        {
+            ToolSprite.flipX = true;
+        }
+        else
+        {
+            ToolSprite.flipX = false;
+        }
     }
 
     private void DoMovement()

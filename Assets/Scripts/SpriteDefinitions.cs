@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SpriteDefinitions : MonoBehaviour {
-
+public class SpriteDefinitions : MonoBehaviour
+{
     public Sprite[] EGAVisibleSprites;
     public Sprite[] EGAInvisibleSprites;
     public Sprite[] EGADirectionalHead;
@@ -10,4 +10,5 @@ public class SpriteDefinitions : MonoBehaviour {
     public Sprite[] EGAIRHead;
     public Sprite[] EGALongRangeHead;
     public Sprite[] EGAChassis;
+    public Sprite[] EGATool;
 }
