@@ -25,7 +25,7 @@ public enum ToolState
     LASER,
     ACTUATOR,
     PUSHER
-} 
+}
 #endregion
 
 public class GameController : MonoBehaviour
@@ -62,7 +62,7 @@ public class GameController : MonoBehaviour
     public TileMap TileMap;
 
     public SpriteRenderer HeadSprite;
-    public SpriteRenderer BodySprite; 
+    public SpriteRenderer BodySprite;
     #endregion
 
     #region Private Attributes
@@ -80,7 +80,7 @@ public class GameController : MonoBehaviour
     private Chassis chassis;
     #endregion
 
-    #region Public Methods
+    #region MonoBehaviour Methods
     // Use this for initialization
     void Start()
     {
@@ -92,7 +92,132 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ProcessInput();
+        ProcessMovement();
+        UpdateUI();
+        UpdateMap();
 
+    }
+    #endregion
+
+    #region Private Methods
+    private void UpdateMap()
+    {
+        sensor.Scan(PlayerXPos, PlayerYPos, this.direction);
+        for (int x = 0; x < 7; x++)
+        {
+            for (int y = 0; y < 7; y++)
+            {
+                int x_array_pos = (x - 3) + PlayerXPos;
+                int y_array_pos = (y - 3) + PlayerYPos;
+                Tile this_tile = TileMap.TileArray[x_array_pos, y_array_pos];
+
+                if (this_tile.Visible)
+                {
+                    VisibleSprites[x, y].sprite = spriteDefinitions.EGAVisibleSprites[(int)this_tile.KnownContents];
+                }
+                else
+                {
+                    VisibleSprites[x, y].sprite = spriteDefinitions.EGAInvisibleSprites[(int)this_tile.KnownContents];
+                }
+            }
+        }
+
+        HeadSprite.sprite = headSpriteArray[(int)direction];
+        BodySprite.sprite = spriteDefinitions.EGAChassis[(int)chassisState];
+    }
+
+    private void UpdateUI()
+    {
+        foreach (Text text in SensorText)
+        {
+            text.color = InactiveColour;
+        }
+
+        foreach (Text text in ChassisText)
+        {
+            text.color = InactiveColour;
+        }
+
+        foreach (Text text in ToolText)
+        {
+            text.color = InactiveColour;
+        }
+
+        SensorText[(int)sensorState].color = ActiveColour;
+        ChassisText[(int)chassisState].color = ActiveColour;
+        ToolText[(int)toolState].color = ActiveColour;
+    }
+
+    private void ProcessMovement()
+    {
+        int new_x_pos = PlayerXPos;
+        int new_y_pos = PlayerYPos;
+        int forward_move = 0;
+        int lateral_move = 0;
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            this.direction--;
+            if (this.direction < Direction.NORTH)
+            {
+                this.direction = Direction.WEST;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            this.direction++;
+            if (this.direction > Direction.WEST)
+            {
+                this.direction = Direction.NORTH;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            forward_move++;
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            forward_move--;
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            lateral_move--;
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            lateral_move++;
+        }
+
+        switch (this.direction)
+        {
+            case Direction.NORTH:
+                new_y_pos += forward_move;
+                new_x_pos += lateral_move;
+                break;
+            case Direction.EAST:
+                new_x_pos += forward_move;
+                new_y_pos -= lateral_move;
+                break;
+            case Direction.SOUTH:
+                new_y_pos -= forward_move;
+                new_x_pos -= lateral_move;
+                break;
+            case Direction.WEST:
+                new_x_pos -= forward_move;
+                new_y_pos += lateral_move;
+                break;
+        }
+
+        if (TileMap.TileArray[new_x_pos, new_y_pos].CanEnter())
+        {
+            PlayerXPos = new_x_pos;
+            PlayerYPos = new_y_pos;
+        }
+    }
+
+    private void ProcessInput()
+    {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             sensor = new DirectionalSensor(TileMap);
@@ -143,117 +268,8 @@ public class GameController : MonoBehaviour
             chassisState = ChassisState.OFFROAD;
             chassis = new Chassis(chassisState);
         }
-        foreach (Text text in SensorText)
-        {
-            text.color = InactiveColour;
-        }
 
-        foreach (Text text in ChassisText)
-        {
-            text.color = InactiveColour;
-        }
-
-        foreach (Text text in ToolText)
-        {
-            text.color = InactiveColour;
-        }
-
-        SensorText[(int)sensorState].color = ActiveColour;
-        ChassisText[(int)chassisState].color = ActiveColour;
-        ToolText[(int)toolState].color = ActiveColour;
-
-        sensor.Scan(PlayerXPos, PlayerYPos, this.direction);
-        for (int x = 0; x < 7; x++)
-        {
-            for (int y = 0; y < 7; y++)
-            {
-                int x_array_pos = (x - 3) + PlayerXPos;
-                int y_array_pos = (y - 3) + PlayerYPos;
-                Tile this_tile = TileMap.TileArray[x_array_pos, y_array_pos];
-
-                if (this_tile.Visible)
-                {
-                    VisibleSprites[x, y].sprite = spriteDefinitions.EGAVisibleSprites[(int)this_tile.KnownContents];
-                }
-                else
-                {
-                    VisibleSprites[x, y].sprite = spriteDefinitions.EGAInvisibleSprites[(int)this_tile.KnownContents];
-                }
-            }
-        }
-
-        HeadSprite.sprite = headSpriteArray[(int)direction];
-        BodySprite.sprite = spriteDefinitions.EGAChassis[(int)chassisState];
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            this.direction--;
-            if (this.direction < Direction.NORTH)
-            {
-                this.direction = Direction.WEST;
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            this.direction++;
-            if (this.direction > Direction.WEST)
-            {
-                this.direction = Direction.NORTH;
-            }
-        }
-
-        int new_x_pos = PlayerXPos;
-        int new_y_pos = PlayerYPos;
-        int forward_move = 0;
-        int lateral_move = 0;
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            forward_move++;
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            forward_move--;
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            lateral_move--;
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            lateral_move++;
-        }
-
-        switch (this.direction)
-        {
-            case Direction.NORTH:
-                new_y_pos += forward_move;
-                new_x_pos += lateral_move;
-                break;
-            case Direction.EAST:
-                new_x_pos += forward_move;
-                new_y_pos -= lateral_move;
-                break;
-            case Direction.SOUTH:
-                new_y_pos -= forward_move;
-                new_x_pos -= lateral_move;
-                break;
-            case Direction.WEST:
-                new_x_pos -= forward_move;
-                new_y_pos += lateral_move;
-                break;
-        }
-
-        if (TileMap.TileArray[new_x_pos, new_y_pos].CanEnter())
-        {
-            PlayerXPos = new_x_pos;
-            PlayerYPos = new_y_pos;
-        }
     }
-
-    #endregion
-
-    #region Private Methods
 
     private void InitializePlayer()
     {
