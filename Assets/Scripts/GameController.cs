@@ -26,6 +26,7 @@ public class GameController : MonoBehaviour
     private SpriteDefinitions spriteDefinitions;
     public TileMap TileMap;
     private Sensor sensor;
+    private Direction direction;
 
     // Use this for initialization
     void Start()
@@ -77,6 +78,11 @@ public class GameController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             sensor = new DirectionalSensor(TileMap);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            sensor = new OmniSensor(TileMap);
         }
 
         sensor.Scan(PlayerXPos, PlayerYPos, Direction.NORTH);

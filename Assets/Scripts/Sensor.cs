@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 public class Sensor
-{ 
+{
     protected TileMap tileMap;
 
     public Sensor(TileMap map)
@@ -34,5 +34,39 @@ public class DirectionalSensor : Sensor
         {
             tile.SetVisible();
         }
+    }
+}
+
+public class OmniSensor : Sensor
+{
+    public OmniSensor(TileMap map) : base(map)
+    {
+    }
+
+    public override void Scan(int x_pos, int y_pos, Direction dir)
+    {
+        base.Scan(x_pos, y_pos, dir);
+
+        tileMap.TileArray[x_pos - 1, y_pos - 2].SetVisible();
+        tileMap.TileArray[x_pos, y_pos - 2].SetVisible();
+        tileMap.TileArray[x_pos + 1, y_pos - 2].SetVisible();
+        tileMap.TileArray[x_pos - 2, y_pos - 1].SetVisible();
+        tileMap.TileArray[x_pos - 1, y_pos - 1].SetVisible();
+        tileMap.TileArray[x_pos, y_pos - 1].SetVisible();
+        tileMap.TileArray[x_pos + 1, y_pos - 1].SetVisible();
+        tileMap.TileArray[x_pos + 2, y_pos - 1].SetVisible();
+        tileMap.TileArray[x_pos - 2, y_pos].SetVisible();
+        tileMap.TileArray[x_pos - 1, y_pos].SetVisible();
+        tileMap.TileArray[x_pos, y_pos].SetVisible();
+        tileMap.TileArray[x_pos + 1, y_pos].SetVisible();
+        tileMap.TileArray[x_pos + 2, y_pos].SetVisible();
+        tileMap.TileArray[x_pos - 2, y_pos + 1].SetVisible();
+        tileMap.TileArray[x_pos - 1, y_pos + 1].SetVisible();
+        tileMap.TileArray[x_pos, y_pos + 1].SetVisible();
+        tileMap.TileArray[x_pos + 1, y_pos + 1].SetVisible();
+        tileMap.TileArray[x_pos + 2, y_pos + 1].SetVisible();
+        tileMap.TileArray[x_pos - 1, y_pos + 2].SetVisible();
+        tileMap.TileArray[x_pos, y_pos + 2].SetVisible();
+        tileMap.TileArray[x_pos + 1, y_pos + 2].SetVisible();
     }
 }
