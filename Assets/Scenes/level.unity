@@ -337,7 +337,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6666667, g: 0.6666667, b: 0.6666667, a: 1}
+  m_Color: {r: 0, g: 0.6666667, b: 1, a: 1}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1994,6 +1994,7 @@ MonoBehaviour:
   - {fileID: 1267360146}
   - {fileID: 301778633}
   - {fileID: 775346911}
+  PointerText: {fileID: 1370192213}
   PrefabTileSprite: {fileID: 102722, guid: a2471701772e29340bf396e07b4373d7, type: 2}
   VisibleSpritesParent: {fileID: 724078933}
   EGAMode: 1
@@ -2277,7 +2278,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.6666667, b: 1, a: 1}
+  m_Color: {r: 0.6666667, g: 0.6666667, b: 0.6666667, a: 1}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
