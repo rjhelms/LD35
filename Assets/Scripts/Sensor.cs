@@ -120,27 +120,59 @@ public class OmniSensor : Sensor
     {
         base.Scan(x_pos, y_pos, dir);
 
-        tileMap.TileArray[x_pos - 1, y_pos - 2].SetVisible();
-        tileMap.TileArray[x_pos, y_pos - 2].SetVisible();
-        tileMap.TileArray[x_pos + 1, y_pos - 2].SetVisible();
-        tileMap.TileArray[x_pos - 2, y_pos - 1].SetVisible();
         tileMap.TileArray[x_pos - 1, y_pos - 1].SetVisible();
         tileMap.TileArray[x_pos, y_pos - 1].SetVisible();
         tileMap.TileArray[x_pos + 1, y_pos - 1].SetVisible();
-        tileMap.TileArray[x_pos + 2, y_pos - 1].SetVisible();
-        tileMap.TileArray[x_pos - 2, y_pos].SetVisible();
         tileMap.TileArray[x_pos - 1, y_pos].SetVisible();
         tileMap.TileArray[x_pos, y_pos].SetVisible();
         tileMap.TileArray[x_pos + 1, y_pos].SetVisible();
-        tileMap.TileArray[x_pos + 2, y_pos].SetVisible();
-        tileMap.TileArray[x_pos - 2, y_pos + 1].SetVisible();
         tileMap.TileArray[x_pos - 1, y_pos + 1].SetVisible();
         tileMap.TileArray[x_pos, y_pos + 1].SetVisible();
         tileMap.TileArray[x_pos + 1, y_pos + 1].SetVisible();
-        tileMap.TileArray[x_pos + 2, y_pos + 1].SetVisible();
-        tileMap.TileArray[x_pos - 1, y_pos + 2].SetVisible();
-        tileMap.TileArray[x_pos, y_pos + 2].SetVisible();
-        tileMap.TileArray[x_pos + 1, y_pos + 2].SetVisible();
+
+        if (tileMap.TileArray[x_pos, y_pos - 1].Contents == TileContents.EMPTY_TILE)
+            tileMap.TileArray[x_pos, y_pos - 2].SetVisible();
+
+        if (tileMap.TileArray[x_pos, y_pos + 1].Contents == TileContents.EMPTY_TILE)
+            tileMap.TileArray[x_pos, y_pos + 2].SetVisible();
+
+        if (tileMap.TileArray[x_pos - 1, y_pos].Contents == TileContents.EMPTY_TILE)
+            tileMap.TileArray[x_pos - 2, y_pos].SetVisible();
+
+        if (tileMap.TileArray[x_pos + 1, y_pos].Contents == TileContents.EMPTY_TILE)
+            tileMap.TileArray[x_pos + 2, y_pos].SetVisible();
+
+        if (tileMap.TileArray[x_pos - 1, y_pos - 1].Contents == TileContents.EMPTY_TILE |
+            tileMap.TileArray[x_pos, y_pos - 1].Contents == TileContents.EMPTY_TILE)
+            tileMap.TileArray[x_pos - 1, y_pos - 2].SetVisible();
+
+        if (tileMap.TileArray[x_pos + 1, y_pos - 1].Contents == TileContents.EMPTY_TILE |
+            tileMap.TileArray[x_pos, y_pos - 1].Contents == TileContents.EMPTY_TILE)
+            tileMap.TileArray[x_pos + 1, y_pos - 2].SetVisible();
+
+        if (tileMap.TileArray[x_pos - 1, y_pos + 1].Contents == TileContents.EMPTY_TILE |
+            tileMap.TileArray[x_pos, y_pos + 1].Contents == TileContents.EMPTY_TILE)
+            tileMap.TileArray[x_pos - 1, y_pos + 2].SetVisible();
+
+        if (tileMap.TileArray[x_pos + 1, y_pos + 1].Contents == TileContents.EMPTY_TILE |
+            tileMap.TileArray[x_pos, y_pos + 1].Contents == TileContents.EMPTY_TILE)
+            tileMap.TileArray[x_pos + 1, y_pos + 2].SetVisible();
+
+        if (tileMap.TileArray[x_pos - 1, y_pos - 1].Contents == TileContents.EMPTY_TILE |
+            tileMap.TileArray[x_pos - 1, y_pos].Contents == TileContents.EMPTY_TILE)
+            tileMap.TileArray[x_pos - 2, y_pos - 1].SetVisible();
+
+        if (tileMap.TileArray[x_pos - 1, y_pos + 1].Contents == TileContents.EMPTY_TILE |
+            tileMap.TileArray[x_pos - 1, y_pos].Contents == TileContents.EMPTY_TILE)
+            tileMap.TileArray[x_pos - 2, y_pos + 1].SetVisible();
+
+        if (tileMap.TileArray[x_pos + 1, y_pos - 1].Contents == TileContents.EMPTY_TILE |
+            tileMap.TileArray[x_pos + 1, y_pos].Contents == TileContents.EMPTY_TILE)
+            tileMap.TileArray[x_pos + 2, y_pos - 1].SetVisible();
+
+        if (tileMap.TileArray[x_pos + 1, y_pos + 1].Contents == TileContents.EMPTY_TILE |
+            tileMap.TileArray[x_pos + 1, y_pos].Contents == TileContents.EMPTY_TILE)
+            tileMap.TileArray[x_pos + 2, y_pos + 1].SetVisible();
     }
 }
 
