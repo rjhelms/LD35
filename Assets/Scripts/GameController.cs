@@ -25,12 +25,13 @@ public class GameController : MonoBehaviour
     public bool EGAMode = true;
     private SpriteDefinitions spriteDefinitions;
     public TileMap TileMap;
+    private Sensor sensor;
 
     // Use this for initialization
     void Start()
     {
         TileMap = new TileMap();
-
+        sensor = new Sensor(TileMap);
         VisibleSprites = new SpriteRenderer[7, 7];
         spriteDefinitions = FindObjectOfType<SpriteDefinitions>();
 
@@ -67,6 +68,18 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            sensor = new Sensor(TileMap);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            sensor = new DirectionalSensor(TileMap);
+        }
+
+        sensor.Scan(PlayerXPos, PlayerYPos, Direction.NORTH);
         for (int x = 0; x < 7; x++)
         {
             for (int y = 0; y < 7; y++)
@@ -74,14 +87,6 @@ public class GameController : MonoBehaviour
                 int x_array_pos = (x - 3) + PlayerXPos;
                 int y_array_pos = (y - 3) + PlayerYPos;
                 Tile this_tile = TileMap.TileArray[x_array_pos, y_array_pos];
-                if (Math.Abs((x - 3) * (y - 3)) < 3 & x > 0 & x < 6 & y > 0 & y < 6)
-                {
-                    this_tile.SetVisible();
-                }
-                else
-                {
-                    this_tile.SetInvisible();
-                }
 
                 if (this_tile.Visible)
                 {
@@ -93,7 +98,6 @@ public class GameController : MonoBehaviour
                 }
             }
         }
-
         int new_x_pos = PlayerXPos;
         int new_y_pos = PlayerYPos;
         if (Input.GetKeyDown(KeyCode.W))
@@ -112,11 +116,12 @@ public class GameController : MonoBehaviour
         {
             new_x_pos++;
         }
-        
+
         if (TileMap.TileArray[new_x_pos, new_y_pos].CanEnter())
         {
             PlayerXPos = new_x_pos;
             PlayerYPos = new_y_pos;
         }
+
     }
 }
