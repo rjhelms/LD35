@@ -106,65 +106,23 @@ public class GameController : MonoBehaviour
             }
             VisibleSprites[3, 3].sprite = PlayerSprites[(int)this.direction];
         }
-
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            this.direction--;
-            if (this.direction < Direction.NORTH)
-            {
-                this.direction = Direction.WEST;
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            this.direction++;
-            if (this.direction > Direction.WEST)
-            {
-                this.direction = Direction.NORTH;
-            }
-        }
-
         int new_x_pos = PlayerXPos;
         int new_y_pos = PlayerYPos;
-        int forward_move = 0;
-        int lateral_move = 0;
         if (Input.GetKeyDown(KeyCode.W))
         {
-            forward_move++;
+            new_y_pos++;
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            forward_move--;
+            new_y_pos--;
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            lateral_move--;
+            new_x_pos--;
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            lateral_move++;
-        }
-
-        switch (this.direction)
-        {
-            case Direction.NORTH:
-                new_y_pos += forward_move;
-                new_x_pos += lateral_move;
-                break;
-            case Direction.EAST:
-                new_x_pos += forward_move;
-                new_y_pos -= lateral_move;
-                break;
-            case Direction.SOUTH:
-                new_y_pos -= forward_move;
-                new_x_pos -= lateral_move;
-                break;
-            case Direction.WEST:
-                new_x_pos -= forward_move;
-                new_y_pos += lateral_move;
-                break;
+            new_x_pos++;
         }
 
         if (TileMap.TileArray[new_x_pos, new_y_pos].CanEnter())
