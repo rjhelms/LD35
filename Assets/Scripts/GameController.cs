@@ -1,5 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
+
+public enum SensorState
+{
+    BASIC,
+    OMNI,
+    INFRARED,
+    LONGRANGE
+}
 
 public class GameController : MonoBehaviour
 {
@@ -17,6 +26,13 @@ public class GameController : MonoBehaviour
     public int YSpriteOffset = 13;
     public int YSpriteSize = 25;
 
+    public Color ActiveColour;
+    public Color InactiveColour;
+
+    public Text[] SensorText;
+    public Text[] ChassisText;
+    public Text[] ToolText;
+
     public GameObject PrefabTileSprite;
 
     public SpriteRenderer[,] VisibleSprites;
@@ -27,8 +43,10 @@ public class GameController : MonoBehaviour
     public TileMap TileMap;
     private Sensor sensor;
     private Direction direction;
-
-    public Sprite[] PlayerSprites;
+    private SensorState sensorState;
+    public SpriteRenderer HeadSprite;
+    public SpriteRenderer BodySprite;
+    private Sprite[] headSpriteArray;
 
     // Use this for initialization
     void Start()
@@ -37,6 +55,8 @@ public class GameController : MonoBehaviour
         VisibleSprites = new SpriteRenderer[7, 7];
         spriteDefinitions = FindObjectOfType<SpriteDefinitions>();
         direction = Direction.NORTH;
+        sensorState = SensorState.BASIC;
+        headSpriteArray = spriteDefinitions.EGADirectionalHead;
         for (int x = 0; x < 7; x++)
         {
             for (int y = 0; y < 7; y++)
@@ -74,23 +94,37 @@ public class GameController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             sensor = new DirectionalSensor(TileMap);
+            sensorState = SensorState.BASIC;
+            headSpriteArray = spriteDefinitions.EGADirectionalHead;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             sensor = new OmniSensor(TileMap);
+            sensorState = SensorState.OMNI;
+            headSpriteArray = spriteDefinitions.EGAOmniHead;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             sensor = new IRSensor(TileMap);
+            sensorState = SensorState.INFRARED;
+            headSpriteArray = spriteDefinitions.EGAIRHead;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             sensor = new LongRangeSensor(TileMap);
+            sensorState = SensorState.LONGRANGE;
+            headSpriteArray = spriteDefinitions.EGALongRangeHead;
         }
 
+        foreach (Text text in SensorText)
+        {
+            text.color = InactiveColour;
+        }
+
+        SensorText[(int)sensorState].color = ActiveColour;
         sensor.Scan(PlayerXPos, PlayerYPos, this.direction);
         for (int x = 0; x < 7; x++)
         {
@@ -109,9 +143,9 @@ public class GameController : MonoBehaviour
                     VisibleSprites[x, y].sprite = spriteDefinitions.EGAInvisibleSprites[(int)this_tile.KnownContents];
                 }
             }
-            VisibleSprites[3, 3].sprite = PlayerSprites[(int)this.direction];
         }
 
+        HeadSprite.sprite = headSpriteArray[(int)direction];
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
