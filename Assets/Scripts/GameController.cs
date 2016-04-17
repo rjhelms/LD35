@@ -214,6 +214,10 @@ public class GameController : MonoBehaviour
             PlayerXPos = new_x_pos;
             PlayerYPos = new_y_pos;
         }
+        else
+        {
+            TileMap.TileArray[new_x_pos, new_y_pos].SetVisible();
+        }
     }
 
     private void ProcessInput()
