@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System;
 
+#region State Enums
 public enum SensorState
 {
     BASIC,
@@ -18,8 +19,18 @@ public enum ChassisState
     OFFROAD
 }
 
+public enum ToolState
+{
+    NONE,
+    LASER,
+    ACTUATOR,
+    PUSHER
+} 
+#endregion
+
 public class GameController : MonoBehaviour
 {
+    #region Public Attributes
     public Material RenderMaterial;
     public Camera WorldCamera;
 
@@ -47,18 +58,29 @@ public class GameController : MonoBehaviour
     public Transform VisibleSpritesParent;
 
     public bool EGAMode = true;
-    private SpriteDefinitions spriteDefinitions;
+
     public TileMap TileMap;
-    private Sensor sensor;
+
+    public SpriteRenderer HeadSprite;
+    public SpriteRenderer BodySprite; 
+    #endregion
+
+    #region Private Attributes
+    private int PlayerTicks;
+
+    private SpriteDefinitions spriteDefinitions;
+    private Sprite[] headSpriteArray;
+
     private Direction direction;
     private SensorState sensorState;
     private ChassisState chassisState;
-    private Chassis chassis;
-    public SpriteRenderer HeadSprite;
-    public SpriteRenderer BodySprite;
-    private Sprite[] headSpriteArray;
-    private int PlayerTicks;
+    private ToolState toolState;
 
+    private Sensor sensor;
+    private Chassis chassis;
+    #endregion
+
+    #region Public Methods
     // Use this for initialization
     void Start()
     {
@@ -131,8 +153,15 @@ public class GameController : MonoBehaviour
             text.color = InactiveColour;
         }
 
+        foreach (Text text in ToolText)
+        {
+            text.color = InactiveColour;
+        }
+
         SensorText[(int)sensorState].color = ActiveColour;
         ChassisText[(int)chassisState].color = ActiveColour;
+        ToolText[(int)toolState].color = ActiveColour;
+
         sensor.Scan(PlayerXPos, PlayerYPos, this.direction);
         for (int x = 0; x < 7; x++)
         {
@@ -222,6 +251,8 @@ public class GameController : MonoBehaviour
         }
     }
 
+    #endregion
+
     #region Private Methods
 
     private void InitializePlayer()
@@ -232,6 +263,7 @@ public class GameController : MonoBehaviour
         headSpriteArray = spriteDefinitions.EGADirectionalHead;
         chassisState = ChassisState.BASIC;
         chassis = new Chassis(chassisState);
+        toolState = ToolState.NONE;
     }
 
     private void InitializeUI()
