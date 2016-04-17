@@ -10,6 +10,14 @@ public enum SensorState
     LONGRANGE
 }
 
+public enum ChassisState
+{
+    BASIC,
+    SILENT,
+    FAST,
+    OFFROAD
+}
+
 public class GameController : MonoBehaviour
 {
     public Material RenderMaterial;
@@ -44,9 +52,12 @@ public class GameController : MonoBehaviour
     private Sensor sensor;
     private Direction direction;
     private SensorState sensorState;
+    private ChassisState chassisState;
+    private Chassis chassis;
     public SpriteRenderer HeadSprite;
     public SpriteRenderer BodySprite;
     private Sprite[] headSpriteArray;
+    private int PlayerTicks;
 
     // Use this for initialization
     void Start()
@@ -93,7 +104,13 @@ public class GameController : MonoBehaviour
             text.color = InactiveColour;
         }
 
+        foreach (Text text in ChassisText)
+        {
+            text.color = InactiveColour;
+        }
+
         SensorText[(int)sensorState].color = ActiveColour;
+        ChassisText[(int)chassisState].color = ActiveColour;
         sensor.Scan(PlayerXPos, PlayerYPos, this.direction);
         for (int x = 0; x < 7; x++)
         {
