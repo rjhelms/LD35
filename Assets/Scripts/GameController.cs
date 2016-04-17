@@ -28,6 +28,8 @@ public class GameController : MonoBehaviour
     private Sensor sensor;
     private Direction direction;
 
+    public Sprite[] PlayerSprites;
+
     // Use this for initialization
     void Start()
     {
@@ -36,6 +38,7 @@ public class GameController : MonoBehaviour
         VisibleSprites = new SpriteRenderer[7, 7];
         spriteDefinitions = FindObjectOfType<SpriteDefinitions>();
 
+        direction = Direction.NORTH;
         for (int x = 0; x < 7; x++)
         {
             for (int y = 0; y < 7; y++)
@@ -103,6 +106,7 @@ public class GameController : MonoBehaviour
                     VisibleSprites[x, y].sprite = spriteDefinitions.EGAInvisibleSprites[(int)this_tile.KnownContents];
                 }
             }
+            VisibleSprites[3, 3].sprite = PlayerSprites[(int)this.direction];
         }
 
 
