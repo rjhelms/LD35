@@ -34,10 +34,9 @@ public class GameController : MonoBehaviour
     void Start()
     {
         TileMap = new TileMap();
-        sensor = new Sensor(TileMap);
+        sensor = new DirectionalSensor(TileMap);
         VisibleSprites = new SpriteRenderer[7, 7];
         spriteDefinitions = FindObjectOfType<SpriteDefinitions>();
-
         direction = Direction.NORTH;
         for (int x = 0; x < 7; x++)
         {
@@ -75,17 +74,17 @@ public class GameController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            sensor = new Sensor(TileMap);
+            sensor = new DirectionalSensor(TileMap);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            sensor = new DirectionalSensor(TileMap);
+            sensor = new OmniSensor(TileMap);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            sensor = new OmniSensor(TileMap);
+            sensor = new IRSensor(TileMap);
         }
 
         sensor.Scan(PlayerXPos, PlayerYPos, this.direction);
