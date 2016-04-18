@@ -85,6 +85,8 @@ public class GameController : MonoBehaviour
 
     public int MaxHitPoints = 100;
     public int PlayerLaserDamage = 10;
+
+    public bool MadeNoistLastMove = false;
     #endregion
 
     #region Private Attributes
@@ -402,6 +404,10 @@ public class GameController : MonoBehaviour
                 PlayerYPos = new_y_pos;
                 TileMap.TileArray[PlayerXPos, PlayerYPos].SetInvisible();
                 Tick();
+                if (chassisState != ChassisState.SILENT)
+                {
+                    MadeNoistLastMove = true;
+                }
             }
             else
             {
@@ -451,6 +457,7 @@ public class GameController : MonoBehaviour
             if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.EMPTY_TILE)
             {
                 new Projectile(PlayerXPos, PlayerYPos, this, TileMap, direction, null, PlayerLaserDamage);
+                MadeNoistLastMove = true;
                 moved = true;
             }
             else if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.DUMB_BOT |
@@ -460,6 +467,7 @@ public class GameController : MonoBehaviour
                 Enemy hit = GetEnemyAtTile(facing_x, facing_y);
                 Debug.Log("Player hit " + hit.Name + " directly");
                 hit.Hit(PlayerLaserDamage);
+                MadeNoistLastMove = true;
                 moved = true;
             }
             else if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_N |
@@ -470,6 +478,7 @@ public class GameController : MonoBehaviour
                 Projectile hit = GetProjectileAtTile(facing_x, facing_y);
                 Debug.Log("Player destroyed projectile directly");
                 hit.Destroy();
+                MadeNoistLastMove = true;
                 moved = true;
                 doEnemyMovement();
             }
@@ -484,11 +493,13 @@ public class GameController : MonoBehaviour
         {
             playerTick = 0;
             lastPlayerTick = 0;
+            Debug.LogFormat("Processing enemy moves, noise {0}", MadeNoistLastMove);
             for (int i = Enemies.Count - 1; i >= 0; i--)
             {
                 Enemies[i].Move();
             }
 
+            MadeNoistLastMove = false;
         }
     }
 
