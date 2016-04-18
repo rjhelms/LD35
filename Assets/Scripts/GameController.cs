@@ -66,7 +66,7 @@ public class GameController : MonoBehaviour
     public Text PointerText;
     public Text CountText;
     public Text BatteryText;
-
+    public Text MessageText;
     public GameObject PrefabTileSprite;
 
     public SpriteRenderer[,] VisibleSprites;
@@ -83,7 +83,8 @@ public class GameController : MonoBehaviour
     public List<Enemy> Enemies = new List<Enemy>();
     public List<Projectile> Projectiles = new List<Projectile>();
 
-    public int MaxHitPoints = 100;
+    public int StartingHitPoints = 100;
+    public int MaxHitPoints = 150;
     public int PlayerLaserDamage = 10;
 
     public bool MadeNoistLastMove = false;
@@ -147,10 +148,10 @@ public class GameController : MonoBehaviour
                 doMovement();
                 if (lastPlayerTick != playerTick)
                 {
-                    
+
                     lastPlayerTick = playerTick;
                 }
-                
+
                 break;
             case GameState.SELECTION:
                 doSelection();
@@ -207,10 +208,10 @@ public class GameController : MonoBehaviour
 
     private void takeDamage(int damage)
     {
-        currentHitPoints -= damage;
-        if (currentHitPoints < 0)
-            currentHitPoints = 0;
-        if (currentHitPoints == 0)
+        ScoreManager.Instance.HitPoints -= damage;
+        if (ScoreManager.Instance.HitPoints < 0)
+            ScoreManager.Instance.HitPoints = 0;
+        if (ScoreManager.Instance.HitPoints == 0)
             setState(GameState.LOST);
     }
     private void updateMap()
@@ -239,19 +240,14 @@ public class GameController : MonoBehaviour
 
     private void updateUI()
     {
-        foreach (Text text in SensorText)
+        for (int i = 0; i < 4; i++)
         {
-            text.color = InactiveColour;
-        }
-
-        foreach (Text text in ChassisText)
-        {
-            text.color = InactiveColour;
-        }
-
-        foreach (Text text in ToolText)
-        {
-            text.color = InactiveColour;
+            SensorText[i].color = InactiveColour;
+            SensorText[i].gameObject.SetActive(ScoreManager.Instance.SensorsAvailable[i]);
+            ChassisText[i].color = InactiveColour;
+            ChassisText[i].gameObject.SetActive(ScoreManager.Instance.ChassisAvailable[i]);
+            ToolText[i].color = InactiveColour;
+            ToolText[i].gameObject.SetActive(ScoreManager.Instance.ChassisAvailable[i]);
         }
 
         SensorText[(int)sensorState].color = ActiveColour;
@@ -296,7 +292,7 @@ public class GameController : MonoBehaviour
         {
             ToolSprite.flipX = false;
         }
-        BatteryText.text = string.Format("BATTERY: {0,3}%", currentHitPoints);
+        BatteryText.text = string.Format("BATTERY: {0,3}%", ScoreManager.Instance.HitPoints);
     }
 
     private void doMovement()
@@ -418,7 +414,7 @@ public class GameController : MonoBehaviour
 
     private void Tick()
     {
-        
+
         lastPlayerTick = playerTick;
         playerTick++;
         globalTick++;
@@ -515,18 +511,63 @@ public class GameController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.DownArrow) | Input.GetKeyDown(KeyCode.S))
         {
-            pointerPosition += 1;
-            if (pointerPosition == 12)
+            pointerPosition++;
+            bool validPointerPosition = false;
+            while (!validPointerPosition)
             {
-                pointerPosition = 0;
+                if (pointerPosition == 12)
+                {
+                    pointerPosition = 0;
+                }
+                if (pointerPosition < 4)
+                {
+                    if (ScoreManager.Instance.SensorsAvailable[pointerPosition])
+                        validPointerPosition = true;
+                    else pointerPosition++;
+                }
+                else if (pointerPosition >= 4 & pointerPosition < 8)
+                {
+                    if (ScoreManager.Instance.ChassisAvailable[pointerPosition - 4])
+                        validPointerPosition = true;
+                    else pointerPosition++;
+                }
+                else if (pointerPosition >= 8)
+                {
+                    if (ScoreManager.Instance.ToolsAvailalbe[pointerPosition - 8])
+                        validPointerPosition = true;
+                    else pointerPosition++;
+                }
             }
         }
+
         if (Input.GetKeyDown(KeyCode.UpArrow) | Input.GetKeyDown(KeyCode.W))
         {
-            pointerPosition -= 1;
-            if (pointerPosition == -1)
+            pointerPosition--;
+            bool validPointerPosition = false;
+            while (!validPointerPosition)
             {
-                pointerPosition = 11;
+                if (pointerPosition == -1)
+                {
+                    pointerPosition = 11;
+                }
+                if (pointerPosition < 4)
+                {
+                    if (ScoreManager.Instance.SensorsAvailable[pointerPosition])
+                        validPointerPosition = true;
+                    else pointerPosition--;
+                }
+                else if (pointerPosition >= 4 & pointerPosition < 8)
+                {
+                    if (ScoreManager.Instance.ChassisAvailable[pointerPosition - 4])
+                        validPointerPosition = true;
+                    else pointerPosition--;
+                }
+                else if (pointerPosition >= 8)
+                {
+                    if (ScoreManager.Instance.ToolsAvailalbe[pointerPosition - 8])
+                        validPointerPosition = true;
+                    else pointerPosition--;
+                }
             }
         }
 
@@ -590,7 +631,7 @@ public class GameController : MonoBehaviour
         setTool(ToolState.NONE);
         gameState = GameState.MOVEMENT;
         playerTick = 0;
-        currentHitPoints = MaxHitPoints;
+        currentHitPoints = StartingHitPoints;
         for (int x = -1; x < 2; x++)
         {
             for (int y = -1; y < 2; y++)

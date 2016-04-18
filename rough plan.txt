@@ -41,3 +41,8 @@ can use CENTER alignment, but ensure:
     even number of characters on each line
     odd # of lines
     
+level 1:
+get laser, find exist
+
+level 2:
+get past bots
