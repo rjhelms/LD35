@@ -65,6 +65,7 @@ public class GameController : MonoBehaviour
     public Text[] ToolText;
     public Text PointerText;
     public Text CountText;
+    public Text BatteryText;
 
     public GameObject PrefabTileSprite;
 
@@ -81,6 +82,8 @@ public class GameController : MonoBehaviour
 
     public List<Enemy> Enemies = new List<Enemy>();
     public List<Projectile> Projectiles = new List<Projectile>();
+
+    public int MaxHitPoints = 100;
     #endregion
 
     #region Private Attributes
@@ -99,8 +102,8 @@ public class GameController : MonoBehaviour
 
     private int activeCount = 0;
     private int maxCount = 1;
-
     private int pointerPosition;
+    private int currentHitPoints;
     #endregion
 
     #region Internal Properites
@@ -155,14 +158,14 @@ public class GameController : MonoBehaviour
         if (projectile.Origin != null)
         {
             Debug.Log("Hit by projectile from " + projectile.Origin.Name);
-            SetState(GameState.LOST);
+            TakeDamage(10);
         }
     }
 
     public void Hit(Enemy enemy)
     {
         Debug.Log("Hit directly by " + enemy.Name);
-        SetState(GameState.LOST);
+        TakeDamage(10);
     }
 
     public Enemy GetEnemyAtTile(int tile_x, int tile_y)
@@ -191,6 +194,15 @@ public class GameController : MonoBehaviour
     #endregion
 
     #region Private Methods
+
+    private void TakeDamage(int damage)
+    {
+        currentHitPoints -= damage;
+        if (currentHitPoints < 0)
+            currentHitPoints = 0;
+        if (currentHitPoints == 0)
+            SetState(GameState.LOST);
+    }
     private void UpdateMap()
     {
         sensor.Scan(PlayerXPos, PlayerYPos, this.direction);
@@ -252,7 +264,7 @@ public class GameController : MonoBehaviour
                                                          ToolText[pointerPosition - 8].transform.position.y);
         }
 
-        CountText.text = String.Format("ACTIVE  {0}\r\nMAX     {1}", activeCount, maxCount);
+        CountText.text = string.Format("ACTIVE  {0}\r\nMAX     {1}", activeCount, maxCount);
 
         if (activeCount > maxCount)
         {
@@ -274,6 +286,7 @@ public class GameController : MonoBehaviour
         {
             ToolSprite.flipX = false;
         }
+        BatteryText.text = string.Format("BATTERY: {0,3}%", currentHitPoints);
     }
 
     private void DoMovement()
@@ -536,6 +549,7 @@ public class GameController : MonoBehaviour
         SetTool(ToolState.NONE);
         gameState = GameState.MOVEMENT;
         playerTicks = 0;
+        currentHitPoints = MaxHitPoints;
         for (int x = -1; x < 2; x++)
         {
             for (int y = -1; y < 2; y++)

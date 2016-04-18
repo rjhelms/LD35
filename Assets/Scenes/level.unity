@@ -1326,6 +1326,79 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 900912920}
+--- !u!1 &1220014109
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 1220014112}
+  - 222: {fileID: 1220014111}
+  - 114: {fileID: 1220014110}
+  m_Layer: 5
+  m_Name: Battery
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1220014110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1220014109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.6666667, g: 0.6666667, b: 0.6666667, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: dcaba5b2f7c338b4a8d0887e669fedb5, type: 3}
+    m_FontSize: 8
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 8
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 'BATTERY: 100%'
+--- !u!222 &1220014111
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1220014109}
+--- !u!224 &1220014112
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1220014109}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1371560979}
+  m_RootOrder: 7
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 136, y: 192}
+  m_SizeDelta: {x: 200, y: 8}
+  m_Pivot: {x: 0, y: 0}
 --- !u!1 &1267360144
 GameObject:
   m_ObjectHideFlags: 0
@@ -1936,6 +2009,7 @@ RectTransform:
   - {fileID: 1904791228}
   - {fileID: 701587771}
   - {fileID: 1370192212}
+  - {fileID: 1220014112}
   m_Father: {fileID: 1958461351}
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
@@ -2056,12 +2130,14 @@ MonoBehaviour:
   - {fileID: 775346911}
   PointerText: {fileID: 1370192213}
   CountText: {fileID: 701587772}
+  BatteryText: {fileID: 1220014110}
   PrefabTileSprite: {fileID: 102722, guid: a2471701772e29340bf396e07b4373d7, type: 2}
   VisibleSpritesParent: {fileID: 724078933}
   EGAMode: 1
   HeadSprite: {fileID: 52553934}
   BodySprite: {fileID: 91779061}
   ToolSprite: {fileID: 172526951}
+  MaxHitPoints: 100
 --- !u!4 &1554982844
 Transform:
   m_ObjectHideFlags: 0
