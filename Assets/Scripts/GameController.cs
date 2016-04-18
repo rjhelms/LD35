@@ -93,6 +93,10 @@ public class GameController : MonoBehaviour
     public int PlayerLaserDamage = 10;
     public int BatteryHitPoints = 50;
     public bool MadeNoiseLastMove = false;
+    public string LevelString;
+    public string SelectString = "CONFIGURING BOT: TAB WHEN DONE";
+    public string TooManyString = "TOO MANY PARTS SELECTED";
+
     #endregion
 
     #region Private Attributes
@@ -110,6 +114,8 @@ public class GameController : MonoBehaviour
     private int lastPlayerTick;
     private int globalTick = 0;
     private float notificationEndTime;
+
+    private string[] Messages;
 
     private int startHitPoints;
     private int startActiveCount;
@@ -329,6 +335,7 @@ public class GameController : MonoBehaviour
             ToolSprite.flipX = false;
         }
         BatteryText.text = string.Format("BATTERY: {0,3}%", ScoreManager.Instance.HitPoints);
+        displayMessage();
     }
 
     private void doMovement()
@@ -573,7 +580,11 @@ public class GameController : MonoBehaviour
 
         for (int i = Projectiles.Count - 1; i >= 0; i--)
         {
-            Projectiles[i].Move();
+            Projectiles[i].Move();  // projectiles move two tiles a tick?
+        }
+        for (int i = Projectiles.Count - 1; i >= 0; i--)
+        {
+            Projectiles[i].Move();  // projectiles move two tiles a tick?
         }
 
         // battery over 100% fades each tick
@@ -925,6 +936,25 @@ public class GameController : MonoBehaviour
     private void setTool(ToolState state)
     {
         ScoreManager.Instance.toolState = state;
+    }
+
+    private void displayMessage()
+    {
+        switch (gameState)
+        {
+            case GameState.SELECTION:
+                if (ScoreManager.Instance.ActivePartCount <= ScoreManager.Instance.MaxPartCount)
+                {
+                    MessageText.text = SelectString;
+                } else
+                {
+                    MessageText.text = TooManyString;
+                }
+                break;
+            case GameState.MOVEMENT:
+                MessageText.text = LevelString;
+                break;
+        }
     }
     #endregion
 }

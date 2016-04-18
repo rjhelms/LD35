@@ -2147,6 +2147,9 @@ MonoBehaviour:
   PlayerLaserDamage: 10
   BatteryHitPoints: 50
   MadeNoiseLastMove: 0
+  LevelString: FIND THE EXIT
+  SelectString: 'CONFIGURING BOT: TAB WHEN DONE'
+  TooManyString: TOO MANY PARTS SELECTED
 --- !u!4 &1554982844
 Transform:
   m_ObjectHideFlags: 0
