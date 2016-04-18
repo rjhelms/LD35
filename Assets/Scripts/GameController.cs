@@ -88,7 +88,7 @@ public class GameController : MonoBehaviour
     #endregion
 
     #region Private Attributes
-    private int playerTicks;
+    private int playerTick;
 
     private SpriteDefinitions spriteDefinitions;
     private Sprite[] headSpriteArray;
@@ -105,6 +105,8 @@ public class GameController : MonoBehaviour
     private int maxCount = 1;
     private int pointerPosition;
     private int currentHitPoints;
+    private int lastPlayerTick;
+    private int globalTick = 0;
     #endregion
 
     #region Internal Properites
@@ -141,7 +143,12 @@ public class GameController : MonoBehaviour
         {
             case GameState.MOVEMENT:
                 doMovement();
-                updateMap();
+                if (lastPlayerTick != playerTick)
+                {
+                    
+                    lastPlayerTick = playerTick;
+                }
+                
                 break;
             case GameState.SELECTION:
                 doSelection();
@@ -206,6 +213,7 @@ public class GameController : MonoBehaviour
     }
     private void updateMap()
     {
+        Debug.LogFormat("Updating map, tick {0}", globalTick);
         sensor.Scan(PlayerXPos, PlayerYPos, this.direction);
         for (int x = 0; x < 7; x++)
         {
@@ -225,7 +233,6 @@ public class GameController : MonoBehaviour
                 }
             }
         }
-
     }
 
     private void updateUI()
@@ -390,17 +397,34 @@ public class GameController : MonoBehaviour
 
             if (TileMap.TileArray[new_x_pos, new_y_pos].CanEnter())
             {
+                Debug.LogFormat("Player moved at {0}, {1}", PlayerXPos, PlayerYPos);
                 PlayerXPos = new_x_pos;
                 PlayerYPos = new_y_pos;
                 TileMap.TileArray[PlayerXPos, PlayerYPos].SetInvisible();
-                playerTicks++;
-                doEnemyMovement();
+                Tick();
             }
             else
             {
                 TileMap.TileArray[new_x_pos, new_y_pos].SetVisible();
             }
         }
+    }
+
+    private void Tick()
+    {
+        
+        lastPlayerTick = playerTick;
+        playerTick++;
+        globalTick++;
+        Debug.LogFormat("Tick {0}, player tick {1}", globalTick, playerTick);
+        doEnemyMovement();
+
+        for (int i = Projectiles.Count - 1; i >= 0; i--)
+        {
+            Projectiles[i].Move();
+        }
+
+        updateMap();
     }
 
     private bool playerFire()
@@ -447,6 +471,7 @@ public class GameController : MonoBehaviour
                 Debug.Log("Player destroyed projectile directly");
                 hit.Destroy();
                 moved = true;
+                doEnemyMovement();
             }
         }
 
@@ -455,11 +480,15 @@ public class GameController : MonoBehaviour
 
     private void doEnemyMovement()
     {
-        Projectiles.ForEach(item => item.Move());
-        if (playerTicks >= chassis.MaxTicks)
+        if (playerTick >= chassis.MaxTicks)
         {
-            playerTicks = 0;
-            Enemies.ForEach(enemy => enemy.Move());
+            playerTick = 0;
+            lastPlayerTick = 0;
+            for (int i = Enemies.Count - 1; i >= 0; i--)
+            {
+                Enemies[i].Move();
+            }
+
         }
     }
 
@@ -470,7 +499,7 @@ public class GameController : MonoBehaviour
             if (activeCount <= maxCount)
             {
                 setState(GameState.MOVEMENT);
-                playerTicks++;
+                Tick();
             }
         }
         if (Input.GetKeyDown(KeyCode.DownArrow) | Input.GetKeyDown(KeyCode.S))
@@ -549,7 +578,7 @@ public class GameController : MonoBehaviour
         setChassis(ChassisState.BASIC);
         setTool(ToolState.NONE);
         gameState = GameState.MOVEMENT;
-        playerTicks = 0;
+        playerTick = 0;
         currentHitPoints = MaxHitPoints;
         for (int x = -1; x < 2; x++)
         {
@@ -594,6 +623,7 @@ public class GameController : MonoBehaviour
 
         pointerPosition = 0;
         PointerText.color = InactiveColour;
+        updateMap();
     }
 
     private void setChassis(ChassisState state)

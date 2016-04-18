@@ -62,7 +62,7 @@ public class Projectile
     {
         if (Origin == null)
         {
-            Debug.Log("Moving player projectile");
+            Debug.LogFormat("Moving player projectile at {0}, {1}", PositionX, PositionY);
         }
         if (coolDown == 0)
         {
