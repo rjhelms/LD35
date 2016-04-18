@@ -1111,7 +1111,7 @@ public class GameController : MonoBehaviour
                 }
                 else
                 {
-                    SceneManager.LoadScene("level");
+                    SceneManager.LoadScene("levelclear");
                 }
                 break;
             case GameState.LOST:
