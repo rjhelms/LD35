@@ -97,7 +97,7 @@ public class GameController : MonoBehaviour
     public string SelectString = "CONFIGURING BOT: TAB WHEN DONE";
     public string TooManyString = "TOO MANY PARTS SELECTED";
     public List<string> MessageList;
-    public float messageScrollTime = 0.5f;
+    public float messageScrollTime = 0.8f;
     #endregion
 
     #region Private Attributes
@@ -153,9 +153,14 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // debug controls
         if (Input.GetKeyDown(KeyCode.L))
         {
             setState(GameState.LOST);
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            setState(GameState.LEVEL_WON);
         }
         if (Input.GetKeyDown(KeyCode.KeypadPlus))
         {
@@ -165,6 +170,7 @@ public class GameController : MonoBehaviour
         {
             ScoreManager.Instance.MaxPartCount--;
         }
+        // end debug controls
         switch (gameState)
         {
             case GameState.MOVEMENT:
@@ -409,8 +415,18 @@ public class GameController : MonoBehaviour
                     }
                     break;
                 case ToolState.ACTUATOR:
+                    MessageList.Clear();
+                    if (playerActuate())
+                    {
+                        moved = true;
+                    }
                     break;
                 case ToolState.PROBE:
+                    MessageList.Clear();
+                    if (playerProbe())
+                    {
+                        moved = true;
+                    }
                     break;
 
 
@@ -462,7 +478,7 @@ public class GameController : MonoBehaviour
                     MadeNoiseLastMove = true;
                 }
                 if (TileMap.TileArray[PlayerXPos, PlayerYPos].Contents >= TileContents.POWERUP_BATTERY &
-                    TileMap.TileArray[PlayerXPos, PlayerYPos].Contents <= TileContents.POWERUP_TOOL_PROBE)
+                    TileMap.TileArray[PlayerXPos, PlayerYPos].Contents <= TileContents.POWERUP_CPU)
                 {
                     getPowerUp(TileMap.TileArray[PlayerXPos, PlayerYPos]);
                 }
@@ -470,9 +486,33 @@ public class GameController : MonoBehaviour
             else
             {
                 TileMap.TileArray[new_x_pos, new_y_pos].SetVisible();
+                switch (TileMap.TileArray[new_x_pos, new_y_pos].Contents)
+                {
+                    case TileContents.RUBBLE:
+                        MessageList.Add("YOU ARE BLOCKED BY RUBBLE");
+                        break;
+                    case TileContents.BASIC_DOOR:
+                        MessageList.Add("YOU ARE BLOCKED BY A DOOR");
+                        break;
+                    case TileContents.SWITCHED_DOOR:
+                        MessageList.Add("YOU ARE BLOCKED BY A DOOR");
+                        break;
+                    case TileContents.COMPUTER_DOOR:
+                        MessageList.Add("YOU ARE BLOCKED BY A DOOR");
+                        break;
+                    case TileContents.SWITCH:
+                        MessageList.Add("YOU ARE BLOCKED BY A SWITCH");
+                        break;
+                    case TileContents.TERMINAL:
+                        MessageList.Add("YOU ARE BLOCKED BY A TERMINAL");
+                        break;
+
+                }
             }
         }
     }
+
+
 
     private void getPowerUp(Tile tile)
     {
@@ -665,6 +705,119 @@ public class GameController : MonoBehaviour
             }
         }
 
+        return moved;
+    }
+    private bool playerActuate()
+    {
+        bool moved = false;
+        int facing_x = PlayerXPos;
+        int facing_y = PlayerYPos;
+        switch (direction)
+        {
+            case Direction.NORTH:
+                facing_y++;
+                break;
+            case Direction.EAST:
+                facing_x++;
+                break;
+            case Direction.SOUTH:
+                facing_y--;
+                break;
+            case Direction.WEST:
+                facing_x--;
+                break;
+        }
+        switch (TileMap.TileArray[facing_x, facing_y].Contents)
+        {
+            case TileContents.BASIC_DOOR:
+                MessageList.Add("YOU OPEN THE DOOR");
+                TileMap.TileArray[facing_x, facing_y].Contents = TileContents.EMPTY_TILE;
+                MadeNoiseLastMove = true;
+                moved = true;
+                break;
+            case TileContents.SWITCHED_DOOR:
+                MessageList.Add("THIS DOOR IS SWITCH CONTROLLED");
+                MadeNoiseLastMove = true;
+                moved = false;
+                break;
+            case TileContents.COMPUTER_DOOR:
+                MessageList.Add("THIS DOOR IS COMPUTER...");
+                MessageList.Add("...CONTROLLED");
+                MadeNoiseLastMove = true;
+                moved = false;
+                break;
+            case TileContents.SWITCH:
+                MessageList.Add("YOU PULL THE SWITCH");
+                MessageList.Add("DOORS OPEN SOMEWHERE");
+                TileMap.TileArray[facing_x, facing_y].Contents = TileContents.EMPTY_TILE;
+                for (int x = 0; x < TileMap.TileArray.GetUpperBound(0); x++)
+                {
+                    for (int y = 0; y < TileMap.TileArray.GetUpperBound(1); y++)
+                    {
+                        Tile tile = TileMap.TileArray[x, y];
+                        if (tile.Contents == TileContents.SWITCHED_DOOR)
+                        {
+                            tile.Contents = TileContents.EMPTY_TILE;
+                        }
+                    }
+                }
+                MadeNoiseLastMove = true;
+                moved = true;
+                break;
+
+            default:
+                MessageList.Add("NOTHING TO ACTUATE");
+                moved = false;
+                break;
+        }
+        return moved;
+    }
+
+    private bool playerProbe()
+    {
+        bool moved = false;
+        int facing_x = PlayerXPos;
+        int facing_y = PlayerYPos;
+        switch (direction)
+        {
+            case Direction.NORTH:
+                facing_y++;
+                break;
+            case Direction.EAST:
+                facing_x++;
+                break;
+            case Direction.SOUTH:
+                facing_y--;
+                break;
+            case Direction.WEST:
+                facing_x--;
+                break;
+        }
+        switch (TileMap.TileArray[facing_x, facing_y].Contents)
+        {
+            case TileContents.TERMINAL:
+                MessageList.Add("YOU DISABLE THE TERMINAL");
+                MessageList.Add("DOORS OPEN SOMEWHERE");
+                TileMap.TileArray[facing_x, facing_y].Contents = TileContents.EMPTY_TILE;
+                moved = true;
+                for (int x = 0; x < TileMap.TileArray.GetUpperBound(0); x++)
+                {
+                    for (int y = 0; y < TileMap.TileArray.GetUpperBound(1); y++)
+                    {
+                        Tile tile = TileMap.TileArray[x, y];
+                        if (tile.Contents == TileContents.COMPUTER_DOOR)
+                        {
+                            tile.Contents = TileContents.EMPTY_TILE;
+                        }
+                    }
+                }
+                MadeNoiseLastMove = true;
+                break;
+            default:
+                MessageList.Add("NOTHING TO PROBE");
+                moved = false;
+                break;
+        }
         return moved;
     }
 

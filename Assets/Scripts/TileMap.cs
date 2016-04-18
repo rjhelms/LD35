@@ -20,7 +20,13 @@
     POWERUP_TOOL_LASER,
     POWERUP_TOOL_ACTUATOR,
     POWERUP_TOOL_PROBE,
+    POWERUP_CPU,
     RUBBLE,
+    BASIC_DOOR,
+    SWITCHED_DOOR,
+    COMPUTER_DOOR,
+    SWITCH,
+    TERMINAL,
 }
 
 public class Tile
@@ -94,6 +100,8 @@ public class Tile
                 return true;
             case TileContents.POWERUP_TOOL_PROBE:
                 return true;
+            case TileContents.POWERUP_CPU:
+                return true;
             default:
                 return false;
         }
@@ -136,6 +144,8 @@ public class Tile
             case TileContents.POWERUP_TOOL_ACTUATOR:
                 return true;
             case TileContents.POWERUP_TOOL_PROBE:
+                return true;
+            case TileContents.POWERUP_CPU:
                 return true;
             default:
                 return false;
