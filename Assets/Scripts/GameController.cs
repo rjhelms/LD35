@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 #region State Enums
 public enum SensorState
@@ -537,6 +538,7 @@ public class GameController : MonoBehaviour
                 }
                 break;
         }
+        updateMap();
     }
 
 
@@ -855,7 +857,15 @@ public class GameController : MonoBehaviour
                 PointerText.gameObject.SetActive(true);
                 break;
             case GameState.LEVEL_WON:
-                Debug.LogError("You won!");
+                ScoreManager.Instance.CurrentLevel++;
+                if (ScoreManager.Instance.CurrentLevel == ScoreManager.Instance.MaxLevels)
+                {
+                    Debug.LogError("You won!");
+                }
+                else
+                {
+                    SceneManager.LoadScene("level");
+                }
                 break;
             case GameState.LOST:
                 Debug.LogError("You lost!");
