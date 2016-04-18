@@ -102,19 +102,25 @@ public class GameController : MonoBehaviour
     private Sprite[] headSpriteArray;
 
     private Direction direction;
-    private SensorState sensorState;
-    private ChassisState chassisState;
-    private ToolState toolState;
     private GameState gameState;
     private Sensor sensor;
     private Chassis chassis;
 
-    private int activeCount = 0;
-    private int maxCount = 1;
     private int pointerPosition;
     private int lastPlayerTick;
     private int globalTick = 0;
     private float notificationEndTime;
+
+    private int startHitPoints;
+    private int startActiveCount;
+    private int startMaxCount;
+    private SensorState startSensorState;
+    private ChassisState startChassisState;
+    private ToolState startToolState;
+    private bool[] startSensorsAvailable;
+    private bool[] startChassisAvailable;
+    private bool[] startToolsAvailable;
+
     #endregion
 
     #region Internal Properites
@@ -139,13 +145,17 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            setState(GameState.LOST);
+        }
         if (Input.GetKeyDown(KeyCode.KeypadPlus))
         {
-            maxCount++;
+            ScoreManager.Instance.MaxPartCount++;
         }
         if (Input.GetKeyDown(KeyCode.KeypadMinus))
         {
-            maxCount--;
+            ScoreManager.Instance.MaxPartCount--;
         }
         switch (gameState)
         {
@@ -276,9 +286,9 @@ public class GameController : MonoBehaviour
             ToolText[i].gameObject.SetActive(ScoreManager.Instance.ToolsAvailable[i]);
         }
 
-        SensorText[(int)sensorState].color = ActiveColour;
-        ChassisText[(int)chassisState].color = ActiveColour;
-        ToolText[(int)toolState].color = ActiveColour;
+        SensorText[(int)ScoreManager.Instance.sensorState].color = ActiveColour;
+        ChassisText[(int)ScoreManager.Instance.chassisState].color = ActiveColour;
+        ToolText[(int)ScoreManager.Instance.toolState].color = ActiveColour;
 
         if (pointerPosition < 4)        // is pointing at a Sensor
         {
@@ -296,9 +306,9 @@ public class GameController : MonoBehaviour
                                                          ToolText[pointerPosition - 8].transform.position.y);
         }
 
-        CountText.text = string.Format("ACTIVE  {0}\r\nMAX     {1}", activeCount, maxCount);
+        CountText.text = string.Format("ACTIVE  {0}\r\nMAX     {1}", ScoreManager.Instance.ActivePartCount, ScoreManager.Instance.MaxPartCount);
 
-        if (activeCount > maxCount)
+        if (ScoreManager.Instance.ActivePartCount > ScoreManager.Instance.MaxPartCount)
         {
             CountText.color = ErrorColour;
         }
@@ -308,8 +318,8 @@ public class GameController : MonoBehaviour
         }
 
         HeadSprite.sprite = headSpriteArray[(int)direction];
-        BodySprite.sprite = spriteDefinitions.EGAChassis[(int)chassisState];
-        ToolSprite.sprite = spriteDefinitions.EGATool[(int)toolState];
+        BodySprite.sprite = spriteDefinitions.EGAChassis[(int)ScoreManager.Instance.chassisState];
+        ToolSprite.sprite = spriteDefinitions.EGATool[(int)ScoreManager.Instance.toolState];
         if (direction == Direction.WEST | direction == Direction.SOUTH)
         {
             ToolSprite.flipX = true;
@@ -376,7 +386,7 @@ public class GameController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            switch (toolState)
+            switch (ScoreManager.Instance.toolState)
             {
                 case ToolState.NONE:
                     break;
@@ -419,7 +429,7 @@ public class GameController : MonoBehaviour
                     break;
             }
             bool can_enter = false;
-            if (chassisState == ChassisState.OFFROAD)
+            if (ScoreManager.Instance.chassisState == ChassisState.OFFROAD)
                 can_enter = TileMap.TileArray[new_x_pos, new_y_pos].CanEnterOffroad();
             else
             {
@@ -432,7 +442,7 @@ public class GameController : MonoBehaviour
                 PlayerYPos = new_y_pos;
                 TileMap.TileArray[PlayerXPos, PlayerYPos].SetInvisible();
                 Tick();
-                if (chassisState != ChassisState.SILENT)
+                if (ScoreManager.Instance.chassisState != ChassisState.SILENT)
                 {
                     MadeNoiseLastMove = true;
                 }
@@ -648,7 +658,7 @@ public class GameController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (activeCount <= maxCount)
+            if (ScoreManager.Instance.ActivePartCount <= ScoreManager.Instance.MaxPartCount)
             {
                 setState(GameState.MOVEMENT);
                 Tick();
@@ -758,22 +768,37 @@ public class GameController : MonoBehaviour
                     break;
             }
 
-            activeCount = 0;
-            if (sensorState > SensorState.BASIC)
-                activeCount++;
-            if (chassisState > ChassisState.BASIC)
-                activeCount++;
-            if (toolState > ToolState.NONE)
-                activeCount++;
+            ScoreManager.Instance.ActivePartCount = 0;
+            if (ScoreManager.Instance.sensorState > SensorState.BASIC)
+                ScoreManager.Instance.ActivePartCount++;
+            if (ScoreManager.Instance.chassisState > ChassisState.BASIC)
+                ScoreManager.Instance.ActivePartCount++;
+            if (ScoreManager.Instance.toolState > ToolState.NONE)
+                ScoreManager.Instance.ActivePartCount++;
         }
     }
 
     private void initializePlayer()
     {
         direction = Direction.NORTH;
-        setSensor(SensorState.BASIC);
-        setChassis(ChassisState.BASIC);
-        setTool(ToolState.NONE);
+        setSensor(ScoreManager.Instance.sensorState);
+        setChassis(ScoreManager.Instance.chassisState);
+        setTool(ScoreManager.Instance.toolState);
+
+        // store relevant states at the start of the level, to be restored on lose condition
+        startHitPoints = ScoreManager.Instance.HitPoints;
+        startSensorState = ScoreManager.Instance.sensorState;
+        startChassisState = ScoreManager.Instance.chassisState;
+        startToolState = ScoreManager.Instance.toolState;
+        startActiveCount = ScoreManager.Instance.ActivePartCount;
+        startMaxCount = ScoreManager.Instance.MaxPartCount;
+        startSensorsAvailable = new bool[4];
+        startChassisAvailable = new bool[4];
+        startToolsAvailable = new bool[4];
+        ScoreManager.Instance.SensorsAvailable.CopyTo(startSensorsAvailable, 0);
+        ScoreManager.Instance.ChassisAvailable.CopyTo(startChassisAvailable, 0);
+        ScoreManager.Instance.ChassisAvailable.CopyTo(startToolsAvailable, 0);
+
         gameState = GameState.MOVEMENT;
         playerTick = 0;
         for (int x = -1; x < 2; x++)
@@ -825,13 +850,13 @@ public class GameController : MonoBehaviour
 
     private void setChassis(ChassisState state)
     {
-        chassisState = state;
+        ScoreManager.Instance.chassisState = state;
         chassis = new Chassis(state);
     }
 
     private void setSensor(SensorState state)
     {
-        sensorState = state;
+        ScoreManager.Instance.sensorState = state;
         switch (state)
         {
             case SensorState.BASIC:
@@ -863,7 +888,7 @@ public class GameController : MonoBehaviour
                 break;
             case GameState.SELECTION:
                 Debug.Log("Entering selection state");
-                pointerPosition = (int)sensorState;
+                pointerPosition = (int)ScoreManager.Instance.sensorState;
                 PointerText.gameObject.SetActive(true);
                 break;
             case GameState.LEVEL_WON:
@@ -878,7 +903,17 @@ public class GameController : MonoBehaviour
                 }
                 break;
             case GameState.LOST:
-                Debug.LogError("You lost!");
+                // reset the score manager state properties to the ones recorded at the start of the level
+                ScoreManager.Instance.HitPoints = startHitPoints;
+                ScoreManager.Instance.sensorState = startSensorState;
+                ScoreManager.Instance.chassisState = startChassisState;
+                ScoreManager.Instance.toolState = startToolState;
+                ScoreManager.Instance.ActivePartCount = startActiveCount;
+                ScoreManager.Instance.MaxPartCount = startMaxCount;
+                ScoreManager.Instance.SensorsAvailable = startSensorsAvailable;
+                ScoreManager.Instance.ChassisAvailable = startChassisAvailable;
+                ScoreManager.Instance.ToolsAvailable = startToolsAvailable;
+                SceneManager.LoadScene("level");
                 break;
             case GameState.NOTIFICATION:
                 notificationEndTime = Time.time + 2f;
@@ -889,7 +924,7 @@ public class GameController : MonoBehaviour
 
     private void setTool(ToolState state)
     {
-        toolState = state;
+        ScoreManager.Instance.toolState = state;
     }
     #endregion
 }
