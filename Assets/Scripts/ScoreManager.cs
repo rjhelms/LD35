@@ -13,7 +13,21 @@ public class ScoreManager : Singleton<ScoreManager>
     public bool[] SensorsAvailable = new bool[] { true, false, false, false };
     public bool[] ChassisAvailable = new bool[] { true, false, false, false };
     public bool[] ToolsAvailable = new bool[] { true, false, false, false };
-    public SensorState sensorState;
-    public ChassisState chassisState;
-    public ToolState toolState;
+    public SensorState sensorState = SensorState.BASIC;
+    public ChassisState chassisState = ChassisState.BASIC;
+    public ToolState toolState = ToolState.PROBE;
+
+    public void Reset()
+    {
+        HitPoints = 100;
+        CurrentLevel = 0;
+        ActivePartCount = 0;
+        MaxPartCount = 1;
+        sensorState = SensorState.BASIC;
+        chassisState = ChassisState.BASIC;
+        toolState = ToolState.NONE;
+        SensorsAvailable = new bool[] { true, false, false, false };
+        ChassisAvailable = new bool[] { true, false, false, false };
+        ToolsAvailable = new bool[] { true, false, false, false };
+    }
 }

@@ -1107,7 +1107,7 @@ public class GameController : MonoBehaviour
                 ScoreManager.Instance.CurrentLevel++;
                 if (ScoreManager.Instance.CurrentLevel == ScoreManager.Instance.MaxLevels)
                 {
-                    Debug.LogError("You won!");
+                    SceneManager.LoadScene("winscreen");
                 }
                 else
                 {
