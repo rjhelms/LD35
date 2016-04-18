@@ -164,6 +164,30 @@ public class GameController : MonoBehaviour
         Debug.Log("Hit directly by " + enemy.Name);
         SetState(GameState.LOST);
     }
+
+    public Enemy GetEnemyAtTile(int tile_x, int tile_y)
+    {
+        foreach (Enemy item in Enemies)
+        {
+            if (item.PositionX == tile_x & item.PositionY == tile_y)
+            {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public Projectile GetProjectileAtTile(int tile_x, int tile_y)
+    {
+        foreach (Projectile item in Projectiles)
+        {
+            if (item.PositionX == tile_x & item.PositionY == tile_y)
+            {
+                return item;
+            }
+        }
+        return null;
+    }
     #endregion
 
     #region Private Methods
@@ -328,6 +352,23 @@ public class GameController : MonoBehaviour
                 if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.EMPTY_TILE)
                 {
                     var projectile = new Projectile(PlayerXPos, PlayerYPos, this, TileMap, direction, null);
+                    moved = true;
+                } else if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.DUMB_BOT | 
+                           TileMap.TileArray[facing_x, facing_y].Contents == TileContents.SENTINEL_BOT_EW |
+                           TileMap.TileArray[facing_x, facing_y].Contents == TileContents.SENTINEL_BOT_NS)
+                {
+                    Enemy hit = GetEnemyAtTile(facing_x, facing_y);
+                    Debug.Log("Player hit " + hit.Name + " directly");
+                    hit.Die();
+                    moved = true;
+                } else if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_N |
+                           TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_E |
+                           TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_S |
+                           TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_W)
+                {
+                    Projectile hit = GetProjectileAtTile(facing_x, facing_y);
+                    Debug.Log("Player destroyed projectile directly");
+                    hit.Destroy();
                     moved = true;
                 }
             }

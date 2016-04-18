@@ -41,6 +41,12 @@ public class Projectile
         controller.Projectiles.Add(this);
     }
 
+    public void Destroy()
+    {
+        tileMap.TileArray[PositionX, PositionY].Contents = TileContents.EMPTY_TILE;
+        controller.Projectiles.Remove(this);
+    }
+
     public void Move()
     {
         if (Origin == null)
@@ -70,26 +76,60 @@ public class Projectile
             Tile next_tile = tileMap.TileArray[facing_x, facing_y];
             if (controller.PlayerXPos == facing_x & controller.PlayerYPos == facing_y)
             {
-                controller.Projectiles.Remove(this);
+                // hit a player
+                Destroy();
                 if (Origin != null) // no friendly fire
                 {
                     controller.Hit(this);
                 }
-                this_tile.Contents = TileContents.EMPTY_TILE;
             }
             else if (next_tile.Contents == TileContents.EMPTY_TILE)
             {
+                // move into an empty tile
                 this_tile.Contents = TileContents.EMPTY_TILE;
                 next_tile.Contents = this.tileContent;
                 PositionX = facing_x;
                 PositionY = facing_y;
             }
+            else if (next_tile.Contents == TileContents.LASER_N |
+                     next_tile.Contents == TileContents.LASER_E |
+                     next_tile.Contents == TileContents.LASER_S |
+                     next_tile.Contents == TileContents.LASER_W)
+            {
+                // hit a projectile
+                Projectile hit = controller.GetProjectileAtTile(facing_x, facing_y);
+                if (Origin != null)
+                {
+                    Debug.LogFormat("Projectile destroyed by projectile from {0}", Origin.Name);
+                } else
+                {
+                    Debug.Log("Projectile destroyed by projectile from player");
+                }
+                hit.Destroy();
+                Destroy();
+            }
+            else if (next_tile.Contents == TileContents.DUMB_BOT |
+                     next_tile.Contents == TileContents.SENTINEL_BOT_EW |
+                     next_tile.Contents == TileContents.SENTINEL_BOT_NS)
+            {
+                Enemy hit = controller.GetEnemyAtTile(facing_x, facing_y);
+                hit.Die();
+                if (Origin != null)
+                {
+                    Debug.LogFormat("{0} destroyed by projectile from {1}", hit.Name, Origin.Name);
+                }
+                else
+                {
+                    Debug.LogFormat("{0} destroyed by projectile from player", hit.Name);
+                }
+                Destroy();
+            }
             else
             {
-                this_tile.Contents = TileContents.EMPTY_TILE;
-                controller.Projectiles.Remove(this);
+                Destroy();
             }
-        } else
+        }
+        else
         {
             coolDown--;
         }
