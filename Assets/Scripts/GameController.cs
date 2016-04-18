@@ -69,7 +69,7 @@ public class GameController : MonoBehaviour
     public Text BatteryText;
     public Text MessageText;
     public Text NotificationText;
-
+    public Text LevelText;
     public Canvas NotificationCanvas;
 
     public GameObject PrefabTileSprite;
@@ -814,6 +814,7 @@ public class GameController : MonoBehaviour
         pointerPosition = 0;
         PointerText.color = InactiveColour;
         updateMap();
+        LevelText.text = string.Format("LEVEL: {0}", ScoreManager.Instance.CurrentLevel + 1);
     }
 
     private void setChassis(ChassisState state)
