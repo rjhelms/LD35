@@ -15,7 +15,7 @@ public class ScoreManager : Singleton<ScoreManager>
     public bool[] ToolsAvailable = new bool[] { true, false, false, false };
     public SensorState sensorState = SensorState.BASIC;
     public ChassisState chassisState = ChassisState.BASIC;
-    public ToolState toolState = ToolState.PROBE;
+    public ToolState toolState = ToolState.NONE;
 
     public void Reset()
     {

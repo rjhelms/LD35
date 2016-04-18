@@ -93,6 +93,7 @@ public class Projectile
                 {
                     controller.Hit(this, damage);
                     controller.MessageList.Add("YOU ARE HIT!");
+                    controller.PlaySound(Sound.PLAYER_HIT);
                 }
             }
             else if (next_tile.Contents == TileContents.EMPTY_TILE)
@@ -134,6 +135,7 @@ public class Projectile
                 {
                     controller.MessageList.Add("YOUR LASER HITS!");
                     Debug.LogFormat("{0} hit by projectile from player", hit.Name);
+                    controller.PlaySound(Sound.ENEMY_HIT);
                 }
                 Destroy();
             }

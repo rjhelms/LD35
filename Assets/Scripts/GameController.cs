@@ -40,6 +40,21 @@ public enum GameState
 }
 #endregion
 
+#region AudioEnum
+public enum Sound
+{
+    PLAYER_HIT,
+    ENEMY_HIT,
+    ENEMY_DESTROYED,
+    POWER_UP,
+    LASER_FIRE,
+    DOOR_OPEN,
+    TERMINAL_HACK,
+    SWITCH_PULL,
+    SELECT
+}
+#endregion
+
 public class GameController : MonoBehaviour
 {
     #region Public Attributes
@@ -102,6 +117,8 @@ public class GameController : MonoBehaviour
     public bool[] startSensorsAvailable;
     public bool[] startChassisAvailable;
     public bool[] startToolsAvailable;
+    public AudioClip[] Sounds;
+    public AudioSource AudioSource;
     #endregion
 
     #region Private Attributes
@@ -209,6 +226,11 @@ public class GameController : MonoBehaviour
     #endregion
 
     #region Public Methods
+    public void PlaySound(Sound sound)
+    {
+        AudioSource.PlayOneShot(Sounds[(int)sound]);
+    }
+
     public void Hit(Projectile projectile, int damage)
     {
         if (projectile.Origin != null)
@@ -527,6 +549,7 @@ public class GameController : MonoBehaviour
                     ScoreManager.Instance.HitPoints += BatteryHitPoints;
                     tile.Contents = TileContents.EMPTY_TILE;
                     MessageList.Add("FOUND A BATTERY");
+                    PlaySound(Sound.POWER_UP);
                 }
                 else
                 {
@@ -541,6 +564,7 @@ public class GameController : MonoBehaviour
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE OMNI SENSOR\r\n\r\n\r\nTHIS SENSOR CAN SEE \r\nIN ALL DIRECTIONS \r\n\r\n\r\n\r\n");
                     MessageList.Add("FOUND THE OMNI SENSOR");
+                    PlaySound(Sound.POWER_UP);
                 }
                 break;
             case TileContents.POWERUP_HEAD_IR:
@@ -551,6 +575,7 @@ public class GameController : MonoBehaviour
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE INFRARED SENSOR\r\n\r\n\r\nTHIS SENSOR CAN SEE \r\nTHROUGH WALLS\r\n\r\n\r\n\r\n");
                     MessageList.Add("FOUND THE INFRARED SENSOR");
+                    PlaySound(Sound.POWER_UP);
                 }
                 break;
             case TileContents.POWERUP_HEAD_LONGRANGE:
@@ -561,6 +586,7 @@ public class GameController : MonoBehaviour
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE LONG RANGE \r\nSENSOR\r\n\r\nTHIS SENSOR CAN SEE \r\nONE TILE FARTHER\r\n\r\n\r\n\r\n");
                     MessageList.Add("FOUND THE LONG RANGE SENSOR");
+                    PlaySound(Sound.POWER_UP);
                 }
                 break;
             case TileContents.POWERUP_CHASSIS_SILENT:
@@ -571,6 +597,7 @@ public class GameController : MonoBehaviour
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE SILENT CHASSIS\r\n\r\n\r\nENEMIES WILL NOT HEAR YOU \r\nMOVING WITH THIS EQUIPPED \r\n\r\n\r\n");
                     MessageList.Add("FOUND THE SILENT CHASSIS");
+                    PlaySound(Sound.POWER_UP);
                 }
                 break;
             case TileContents.POWERUP_CHASSIS_FAST:
@@ -581,6 +608,7 @@ public class GameController : MonoBehaviour
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE FAST CHASSIS\r\n\r\n\r\nYOU WILL MOVE MUCH FASTER \r\nTHAN YOUR ENEMIES WITH\r\nTHIS EQUIPPED \r\n\r\n");
                     MessageList.Add("FOUND THE FAST CHASSIS");
+                    PlaySound(Sound.POWER_UP);
                 }
                 break;
             case TileContents.POWERUP_CHASSIS_OFFROAD:
@@ -591,6 +619,7 @@ public class GameController : MonoBehaviour
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE OFF-ROAD CHASSIS\r\n\r\n\r\nYOU CAN RUN OVER\r\nRUBBLE WITH THIS\r\nEQUIPPED\r\n\r\n");
                     MessageList.Add("FOUND THE OFFROAD CHASSIS");
+                    PlaySound(Sound.POWER_UP);
                 }
                 break;
             case TileContents.POWERUP_TOOL_LASER:
@@ -601,6 +630,7 @@ public class GameController : MonoBehaviour
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE LASER \r\n\r\n\r\nYOU CAN BLAST YOUR ENEMIES\r\nTO BITS WITH THIS \r\n\r\n\r\n");
                     MessageList.Add("FOUND THE LASER");
+                    PlaySound(Sound.POWER_UP);
                 }
                 break;
             case TileContents.POWERUP_TOOL_ACTUATOR:
@@ -611,6 +641,7 @@ public class GameController : MonoBehaviour
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE ACTUATOR\r\n\r\n\r\nYOU CAN OPEN DOORS AND USE\r\nSWITCHES WITH THIS\r\n\r\n\r\n\r\n");
                     MessageList.Add("FOUND THE ACTUATOR");
+                    PlaySound(Sound.POWER_UP);
                 }
                 break;
             case TileContents.POWERUP_TOOL_PROBE:
@@ -621,6 +652,7 @@ public class GameController : MonoBehaviour
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE PROBE \r\n\r\n\r\nYOU CAN DISABLE COMPUTER\r\nTERMINALS WITH THIS \r\n\r\n\r\n\r\n");
                     MessageList.Add("FOUND THE PROBE");
+                    PlaySound(Sound.POWER_UP);
                 }
                 break;
             case TileContents.POWERUP_CPU:
@@ -631,12 +663,14 @@ public class GameController : MonoBehaviour
                     ScoreManager.Instance.MaxPartCount++;
                     tile.Contents = TileContents.EMPTY_TILE;
                     MessageList.Add("FOUND A CPU UPGRADE");
+                    PlaySound(Sound.POWER_UP);
                 }
                 else if (ScoreManager.Instance.MaxPartCount < 3)
                 {
                     ScoreManager.Instance.MaxPartCount++;
                     tile.Contents = TileContents.EMPTY_TILE;
                     MessageList.Add("FOUND A CPU UPGRADE");
+                    PlaySound(Sound.POWER_UP);
                 }
                 else
                 {
@@ -702,6 +736,7 @@ public class GameController : MonoBehaviour
                 new Projectile(PlayerXPos, PlayerYPos, this, TileMap, direction, null, PlayerLaserDamage);
                 MadeNoiseLastMove = true;
                 moved = true;
+                PlaySound(Sound.LASER_FIRE);
             }
             else if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.DUMB_BOT |
                      TileMap.TileArray[facing_x, facing_y].Contents == TileContents.SENTINEL_BOT_EW |
@@ -713,6 +748,7 @@ public class GameController : MonoBehaviour
                 hit.Hit(PlayerLaserDamage);
                 MadeNoiseLastMove = true;
                 moved = true;
+                PlaySound(Sound.ENEMY_HIT);
             }
             else if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_N |
                      TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_E |
@@ -725,9 +761,9 @@ public class GameController : MonoBehaviour
                 MadeNoiseLastMove = true;
                 moved = true;
                 doEnemyMovement();
+                PlaySound(Sound.LASER_FIRE);
             }
         }
-
         return moved;
     }
     private bool playerActuate()
@@ -757,6 +793,7 @@ public class GameController : MonoBehaviour
                 TileMap.TileArray[facing_x, facing_y].Contents = TileContents.EMPTY_TILE;
                 MadeNoiseLastMove = true;
                 moved = true;
+                PlaySound(Sound.DOOR_OPEN);
                 break;
             case TileContents.SWITCHED_DOOR:
                 MessageList.Add("THIS DOOR IS SWITCH CONTROLLED");
@@ -772,6 +809,7 @@ public class GameController : MonoBehaviour
             case TileContents.SWITCH:
                 MessageList.Add("YOU PULL THE SWITCH");
                 MessageList.Add("DOORS OPEN SOMEWHERE");
+                PlaySound(Sound.SWITCH_PULL);
                 TileMap.TileArray[facing_x, facing_y].Contents = TileContents.EMPTY_TILE;
                 for (int x = 0; x < TileMap.TileArray.GetUpperBound(0); x++)
                 {
@@ -835,6 +873,7 @@ public class GameController : MonoBehaviour
                     }
                 }
                 MadeNoiseLastMove = true;
+                PlaySound(Sound.TERMINAL_HACK);
                 break;
             default:
                 MessageList.Add("NOTHING TO PROBE");
@@ -855,7 +894,6 @@ public class GameController : MonoBehaviour
             {
                 Enemies[i].Move();
             }
-
             MadeNoiseLastMove = false;
         }
     }
@@ -867,11 +905,13 @@ public class GameController : MonoBehaviour
             if (ScoreManager.Instance.ActivePartCount <= ScoreManager.Instance.MaxPartCount)
             {
                 setState(GameState.MOVEMENT);
+                PlaySound(Sound.SELECT);
                 Tick();
             }
         }
         if (Input.GetKeyDown(KeyCode.DownArrow) | Input.GetKeyDown(KeyCode.S))
         {
+            PlaySound(Sound.SELECT);
             pointerPosition++;
             bool validPointerPosition = false;
             while (!validPointerPosition)
@@ -903,6 +943,7 @@ public class GameController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.UpArrow) | Input.GetKeyDown(KeyCode.W))
         {
+            PlaySound(Sound.SELECT);
             pointerPosition--;
             bool validPointerPosition = false;
             while (!validPointerPosition)
@@ -934,6 +975,7 @@ public class GameController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            PlaySound(Sound.SELECT);
             switch (pointerPosition)
             {
                 case 0:

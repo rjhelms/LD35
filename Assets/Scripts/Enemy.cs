@@ -54,6 +54,7 @@ public class Enemy
         controller.MessageList.Add("ENEMY DESTROYED");
         tileMap.TileArray[PositionX, PositionY].Contents = TileContents.EMPTY_TILE;
         controller.Enemies.Remove(this);
+        controller.PlaySound(Sound.ENEMY_DESTROYED);
     }
 
     protected void fire()
