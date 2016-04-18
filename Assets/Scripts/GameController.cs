@@ -418,8 +418,14 @@ public class GameController : MonoBehaviour
                     new_y_pos += lateral_move;
                     break;
             }
-
-            if (TileMap.TileArray[new_x_pos, new_y_pos].CanEnter())
+            bool can_enter = false;
+            if (chassisState == ChassisState.OFFROAD)
+                can_enter = TileMap.TileArray[new_x_pos, new_y_pos].CanEnterOffroad();
+            else
+            {
+                can_enter = TileMap.TileArray[new_x_pos, new_y_pos].CanEnter();
+            }
+            if (can_enter)
             {
                 Debug.LogFormat("Player moved at {0}, {1}", PlayerXPos, PlayerYPos);
                 PlayerXPos = new_x_pos;
@@ -510,7 +516,7 @@ public class GameController : MonoBehaviour
                     Debug.Log("Got the offroad chassis!");
                     ScoreManager.Instance.ChassisAvailable[(int)ChassisState.OFFROAD] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
-                    Notify("FOUND THE OFF-ROAD CHASSIS\r\n\r\n\r\nYOU CAN RUN OVER SMALL\r\nOBSTACLES WITH THIS\r\nEQUIPPED\r\n\r\n");
+                    Notify("FOUND THE OFF-ROAD CHASSIS\r\n\r\n\r\nYOU CAN RUN OVER\r\nRUBBLE WITH THIS\r\nEQUIPPED\r\n\r\n");
                 }
                 break;
             case TileContents.POWERUP_TOOL_LASER:

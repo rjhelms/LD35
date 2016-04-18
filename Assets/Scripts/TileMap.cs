@@ -20,6 +20,7 @@
     POWERUP_TOOL_LASER,
     POWERUP_TOOL_ACTUATOR,
     POWERUP_TOOL_PROBE,
+    RUBBLE,
 }
 
 public class Tile
@@ -45,14 +46,24 @@ public class Tile
         Visible = false;
     }
 
+    public bool CanEnterOffroad()
+    {
+        bool non_offroad = CanEnter();
+        switch (Contents)
+        {
+            case TileContents.RUBBLE:
+                return true;
+            default:
+                return non_offroad;
+        }
+    }
+
     public bool CanEnter()
     {
         switch (Contents)
         {
             case TileContents.EMPTY_TILE:
                 return true;
-            case TileContents.WALL:
-                return false;
             case TileContents.EXIT_STAIRS:
                 return true;
             case TileContents.LASER_E:
