@@ -1,4 +1,6 @@
-﻿public class Projectile
+﻿using UnityEngine;
+
+public class Projectile
 {
     public int PositionX;
     public int PositionY;
@@ -41,6 +43,10 @@
 
     public void Move()
     {
+        if (Origin == null)
+        {
+            Debug.Log("Moving player projectile");
+        }
         if (coolDown == 0)
         {
             int facing_x = PositionX;
@@ -65,7 +71,10 @@
             if (controller.PlayerXPos == facing_x & controller.PlayerYPos == facing_y)
             {
                 controller.Projectiles.Remove(this);
-                controller.Hit(this);
+                if (Origin != null) // no friendly fire
+                {
+                    controller.Hit(this);
+                }
                 this_tile.Contents = TileContents.EMPTY_TILE;
             }
             else if (next_tile.Contents == TileContents.EMPTY_TILE)

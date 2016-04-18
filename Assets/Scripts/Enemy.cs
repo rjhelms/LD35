@@ -183,7 +183,6 @@ public class Sentinel : Enemy
         {
             check_tile_x += facing_x;
             check_tile_y += facing_y;
-            i++;
             if (controller.PlayerXPos == check_tile_x & controller.PlayerYPos == check_tile_y)
             {
                 to_fire = true;

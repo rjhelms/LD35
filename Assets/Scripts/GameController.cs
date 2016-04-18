@@ -305,6 +305,33 @@ public class GameController : MonoBehaviour
             lateral_move++;
         }
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            int facing_x = PlayerXPos;
+            int facing_y = PlayerYPos;
+            switch (direction)
+            {
+                case Direction.NORTH:
+                    facing_y++;
+                    break;
+                case Direction.EAST:
+                    facing_x++;
+                    break;
+                case Direction.SOUTH:
+                    facing_y--;
+                    break;
+                case Direction.WEST:
+                    facing_x--;
+                    break;
+            }
+            {
+                if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.EMPTY_TILE)
+                {
+                    var projectile = new Projectile(PlayerXPos, PlayerYPos, this, TileMap, direction, null);
+                    moved = true;
+                }
+            }
+        }
         if (forward_move != 0 | lateral_move != 0)
         {
             moved = true;
@@ -349,7 +376,7 @@ public class GameController : MonoBehaviour
 
     private void DoEnemyMovement()
     {
-        Projectiles.ForEach(projectile => projectile.Move());
+        Projectiles.ForEach(item => item.Move());
         if (playerTicks >= chassis.MaxTicks)
         {
             playerTicks = 0;

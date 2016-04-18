@@ -45,6 +45,14 @@ public class Tile
                 return false;
             case TileContents.EXIT_STAIRS:
                 return true;
+            case TileContents.LASER_E:
+                return true;
+            case TileContents.LASER_N:
+                return true;
+            case TileContents.LASER_S:
+                return true;
+            case TileContents.LASER_W:
+                return true;
             default:
                 return false;
         }
