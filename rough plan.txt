@@ -33,3 +33,11 @@ colours:
 
 00. 55. AA. FF. = 2 bits
 for each channel
+
+powerup info panel:
+26 x 21
+
+can use CENTER alignment, but ensure:
+    even number of characters on each line
+    odd # of lines
+    

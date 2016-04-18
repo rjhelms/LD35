@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Collections.Generic;
 
 #region State Enums
 public enum SensorState
@@ -75,6 +76,9 @@ public class GameController : MonoBehaviour
     public SpriteRenderer HeadSprite;
     public SpriteRenderer BodySprite;
     public SpriteRenderer ToolSprite;
+
+    public List<Enemy> Enemies = new List<Enemy>();
+
     #endregion
 
     #region Private Attributes
@@ -95,7 +99,16 @@ public class GameController : MonoBehaviour
     private int maxCount = 1;
 
     private int pointerPosition;
+    #endregion
 
+    #region Internal Properites
+    internal Chassis Chassis
+    {
+        get
+        {
+            return chassis;
+        }
+    }
     #endregion
 
     #region MonoBehaviour Methods
@@ -110,10 +123,19 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.KeypadPlus))
+        {
+            maxCount++;
+        }
+        if (Input.GetKeyDown(KeyCode.KeypadMinus))
+        {
+            maxCount--;
+        }
         switch (gameState)
         {
             case GameState.MOVEMENT:
                 DoMovement();
+                DoEnemyMovement();
                 UpdateMap();
                 break;
             case GameState.SELECTION:
@@ -219,7 +241,7 @@ public class GameController : MonoBehaviour
             SetState(GameState.SELECTION);
             return;
         }
-
+        bool moved = false;
         int new_x_pos = PlayerXPos;
         int new_y_pos = PlayerYPos;
         int forward_move = 0;
@@ -231,6 +253,7 @@ public class GameController : MonoBehaviour
             {
                 this.direction = Direction.WEST;
             }
+            moved = true;
         }
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -240,7 +263,9 @@ public class GameController : MonoBehaviour
             {
                 this.direction = Direction.NORTH;
             }
+            moved = true;
         }
+
         if (Input.GetKeyDown(KeyCode.W))
         {
             forward_move++;
@@ -258,37 +283,56 @@ public class GameController : MonoBehaviour
             lateral_move++;
         }
 
-        switch (this.direction)
+        if (forward_move != 0 | lateral_move != 0)
         {
-            case Direction.NORTH:
-                new_y_pos += forward_move;
-                new_x_pos += lateral_move;
-                break;
-            case Direction.EAST:
-                new_x_pos += forward_move;
-                new_y_pos -= lateral_move;
-                break;
-            case Direction.SOUTH:
-                new_y_pos -= forward_move;
-                new_x_pos -= lateral_move;
-                break;
-            case Direction.WEST:
-                new_x_pos -= forward_move;
-                new_y_pos += lateral_move;
-                break;
+            moved = true;
         }
 
-        if (TileMap.TileArray[new_x_pos, new_y_pos].CanEnter())
+        if (moved)
         {
-            PlayerXPos = new_x_pos;
-            PlayerYPos = new_y_pos;
-        }
-        else
-        {
-            TileMap.TileArray[new_x_pos, new_y_pos].SetVisible();
+            switch (this.direction)
+            {
+                case Direction.NORTH:
+                    new_y_pos += forward_move;
+                    new_x_pos += lateral_move;
+                    break;
+                case Direction.EAST:
+                    new_x_pos += forward_move;
+                    new_y_pos -= lateral_move;
+                    break;
+                case Direction.SOUTH:
+                    new_y_pos -= forward_move;
+                    new_x_pos -= lateral_move;
+                    break;
+                case Direction.WEST:
+                    new_x_pos -= forward_move;
+                    new_y_pos += lateral_move;
+                    break;
+            }
+
+            if (TileMap.TileArray[new_x_pos, new_y_pos].CanEnter())
+            {
+                PlayerXPos = new_x_pos;
+                PlayerYPos = new_y_pos;
+                playerTicks++;
+            }
+            else
+            {
+                TileMap.TileArray[new_x_pos, new_y_pos].SetVisible();
+            }
         }
     }
 
+    private void DoEnemyMovement()
+    {
+        if (playerTicks >= chassis.MaxTicks)
+        {
+            playerTicks = 0;
+            Debug.Log(chassis.MaxTicks);
+            Debug.Log("Doing enemy movement");
+            Enemies.ForEach(enemy => enemy.Move());
+        }
+    }
     private void DoSelection()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -372,6 +416,14 @@ public class GameController : MonoBehaviour
         SetChassis(ChassisState.BASIC);
         SetTool(ToolState.NONE);
         gameState = GameState.MOVEMENT;
+        playerTicks = 0;
+        for (int x = -1; x < 2; x++)
+        {
+            for (int y = -1; y < 2; y++)
+            {
+                TileMap.TileArray[PlayerXPos + x, PlayerYPos + y].SetVisible();
+            }
+        }
     }
 
     private void InitializeUI()

@@ -62,14 +62,19 @@ public class LevelLoader : MonoBehaviour
             {
                 if (line[i] != string.Empty)
                 {
-                    if (int.Parse(line[i]) > 0)
+                    int value = int.Parse(line[i]);
+                    switch (value)
                     {
-                        levelTileMap.TileArray[i, yCoordinate].Contents = (TileContents)int.Parse(line[i]);
-                    }
-                    else if (int.Parse(line[i]) == -1)
-                    {
-                        Controller.PlayerXPos = i;
-                        Controller.PlayerYPos = yCoordinate;
+                        case -1:
+                            Controller.PlayerXPos = i;
+                            Controller.PlayerYPos = yCoordinate;
+                            break;
+                        case (int)TileContents.DUMB_BOT:
+                            new DumbBot(i, yCoordinate, levelTileMap, Controller);
+                            break;
+                        default:
+                            levelTileMap.TileArray[i, yCoordinate].Contents = (TileContents)int.Parse(line[i]);
+                            break;
                     }
                 }
             }

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a910a4d02bf1cb24ab2731138357b148
-timeCreated: 1460848082
+timeCreated: 1460947439
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -8,6 +8,10 @@ TextureImporter:
     21300002: tiles_1
     21300004: tiles_2
     21300006: tiles_3
+    21300008: tiles_4
+    21300010: tiles_5
+    21300012: tiles_6
+    21300014: tiles_7
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -79,8 +83,8 @@ TextureImporter:
     - name: tiles_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 350
+        x: 64
+        y: 375
         width: 32
         height: 25
       alignment: 6
@@ -90,8 +94,52 @@ TextureImporter:
     - name: tiles_3
       rect:
         serializedVersion: 2
-        x: 32
-        y: 350
+        x: 96
+        y: 375
+        width: 32
+        height: 25
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: tiles_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 375
+        width: 32
+        height: 25
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: tiles_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 375
+        width: 32
+        height: 25
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: tiles_6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 375
+        width: 32
+        height: 25
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: tiles_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 375
         width: 32
         height: 25
       alignment: 6

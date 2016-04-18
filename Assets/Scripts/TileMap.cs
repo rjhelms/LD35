@@ -1,7 +1,9 @@
 ﻿public enum TileContents
 {
     EMPTY_TILE,
-    WALL
+    WALL,
+    EXIT_STAIRS,
+    DUMB_BOT,
 }
 
 public class Tile
@@ -28,13 +30,16 @@ public class Tile
 
     public bool CanEnter()
     {
-        if (Contents == TileContents.EMPTY_TILE)
+        switch (Contents)
         {
-            return true;
-        }
-        else
-        {
-            return false;
+            case TileContents.EMPTY_TILE:
+                return true;
+            case TileContents.WALL:
+                return false;
+            case TileContents.EXIT_STAIRS:
+                return true;
+            default:
+                return false;
         }
     }
 }
