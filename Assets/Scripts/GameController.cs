@@ -96,7 +96,8 @@ public class GameController : MonoBehaviour
     public string LevelString;
     public string SelectString = "CONFIGURING BOT: TAB WHEN DONE";
     public string TooManyString = "TOO MANY PARTS SELECTED";
-
+    public List<string> MessageList;
+    public float messageScrollTime = 0.5f;
     #endregion
 
     #region Private Attributes
@@ -126,7 +127,8 @@ public class GameController : MonoBehaviour
     private bool[] startSensorsAvailable;
     private bool[] startChassisAvailable;
     private bool[] startToolsAvailable;
-
+    private float nextMessageTime;
+    private int messagePointer;
     #endregion
 
     #region Internal Properites
@@ -361,6 +363,7 @@ public class GameController : MonoBehaviour
             {
                 this.direction = Direction.WEST;
             }
+            MessageList.Clear();
             moved = true;
         }
 
@@ -371,6 +374,7 @@ public class GameController : MonoBehaviour
             {
                 this.direction = Direction.NORTH;
             }
+            MessageList.Clear();
             moved = true;
         }
 
@@ -399,7 +403,10 @@ public class GameController : MonoBehaviour
                     break;
                 case ToolState.LASER:
                     if (playerFire())
+                    {
+                        MessageList.Clear();
                         moved = true;
+                    }
                     break;
                 case ToolState.ACTUATOR:
                     break;
@@ -411,6 +418,7 @@ public class GameController : MonoBehaviour
         }
         if (forward_move != 0 | lateral_move != 0)
         {
+            MessageList.Clear();
             moved = true;
         }
 
@@ -476,6 +484,7 @@ public class GameController : MonoBehaviour
                     Debug.Log("Got a battery!");
                     ScoreManager.Instance.HitPoints += BatteryHitPoints;
                     tile.Contents = TileContents.EMPTY_TILE;
+                    MessageList.Add("FOUND A BATTERY");
                 }
                 else
                 {
@@ -489,6 +498,7 @@ public class GameController : MonoBehaviour
                     ScoreManager.Instance.SensorsAvailable[(int)SensorState.OMNI] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE OMNI SENSOR\r\n\r\n\r\nTHIS SENSOR CAN SEE \r\nIN ALL DIRECTIONS \r\n\r\n\r\n\r\n");
+                    MessageList.Add("FOUND THE OMNI SENSOR");
                 }
                 break;
             case TileContents.POWERUP_HEAD_IR:
@@ -498,6 +508,7 @@ public class GameController : MonoBehaviour
                     ScoreManager.Instance.SensorsAvailable[(int)SensorState.INFRARED] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE INFRARED SENSOR\r\n\r\n\r\nTHIS SENSOR CAN SEE \r\nTHROUGH WALLS\r\n\r\n\r\n\r\n");
+                    MessageList.Add("FOUND THE INFRARED SENSOR");
                 }
                 break;
             case TileContents.POWERUP_HEAD_LONGRANGE:
@@ -507,6 +518,7 @@ public class GameController : MonoBehaviour
                     ScoreManager.Instance.SensorsAvailable[(int)SensorState.LONGRANGE] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE LONG RANGE \r\nSENSOR\r\n\r\nTHIS SENSOR CAN SEE \r\nONE TILE FARTHER\r\n\r\n\r\n\r\n");
+                    MessageList.Add("FOUND THE LONG RANGE SENSOR");
                 }
                 break;
             case TileContents.POWERUP_CHASSIS_SILENT:
@@ -516,6 +528,7 @@ public class GameController : MonoBehaviour
                     ScoreManager.Instance.ChassisAvailable[(int)ChassisState.SILENT] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE SILENT CHASSIS\r\n\r\n\r\nENEMIES WILL NOT HEAR YOU \r\nMOVING WITH THIS EQUIPPED \r\n\r\n\r\n");
+                    MessageList.Add("FOUND THE SILENT CHASSIS");
                 }
                 break;
             case TileContents.POWERUP_CHASSIS_FAST:
@@ -525,6 +538,7 @@ public class GameController : MonoBehaviour
                     ScoreManager.Instance.ChassisAvailable[(int)ChassisState.FAST] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE FAST CHASSIS\r\n\r\n\r\nYOU WILL MOVE MUCH FASTER \r\nTHAN YOUR ENEMIES WITH\r\nTHIS EQUIPPED \r\n\r\n");
+                    MessageList.Add("FOUND THE FAST CHASSIS");
                 }
                 break;
             case TileContents.POWERUP_CHASSIS_OFFROAD:
@@ -534,6 +548,7 @@ public class GameController : MonoBehaviour
                     ScoreManager.Instance.ChassisAvailable[(int)ChassisState.OFFROAD] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE OFF-ROAD CHASSIS\r\n\r\n\r\nYOU CAN RUN OVER\r\nRUBBLE WITH THIS\r\nEQUIPPED\r\n\r\n");
+                    MessageList.Add("FOUND THE OFFROAD CHASSIS");
                 }
                 break;
             case TileContents.POWERUP_TOOL_LASER:
@@ -543,6 +558,7 @@ public class GameController : MonoBehaviour
                     ScoreManager.Instance.ToolsAvailable[(int)ToolState.LASER] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE LASER \r\n\r\n\r\nYOU CAN BLAST YOUR ENEMIES\r\nTO BITS WITH THIS \r\n\r\n\r\n");
+                    MessageList.Add("FOUND THE LASER");
                 }
                 break;
             case TileContents.POWERUP_TOOL_ACTUATOR:
@@ -552,6 +568,7 @@ public class GameController : MonoBehaviour
                     ScoreManager.Instance.ToolsAvailable[(int)ToolState.ACTUATOR] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE ACTUATOR\r\n\r\n\r\nYOU CAN OPEN DOORS AND USE\r\nSWITCHES WITH THIS\r\n\r\n\r\n\r\n");
+                    MessageList.Add("FOUND THE ACTUATOR");
                 }
                 break;
             case TileContents.POWERUP_TOOL_PROBE:
@@ -561,6 +578,7 @@ public class GameController : MonoBehaviour
                     ScoreManager.Instance.ToolsAvailable[(int)ToolState.PROBE] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
                     Notify("FOUND THE PROBE \r\n\r\n\r\nYOU CAN DISABLE COMPUTER\r\nTERMINALS WITH THIS \r\n\r\n\r\n\r\n");
+                    MessageList.Add("FOUND THE PROBE");
                 }
                 break;
         }
@@ -628,6 +646,7 @@ public class GameController : MonoBehaviour
             {
                 Enemy hit = GetEnemyAtTile(facing_x, facing_y);
                 Debug.Log("Player hit " + hit.Name + " directly");
+                MessageList.Add("YOUR LASER HITS!");
                 hit.Hit(PlayerLaserDamage);
                 MadeNoiseLastMove = true;
                 moved = true;
@@ -857,6 +876,9 @@ public class GameController : MonoBehaviour
         PointerText.color = InactiveColour;
         updateMap();
         LevelText.text = string.Format("LEVEL: {0}", ScoreManager.Instance.CurrentLevel + 1);
+        MessageList = new List<string>();
+        messagePointer = 0;
+        nextMessageTime = Time.time + messageScrollTime;
     }
 
     private void setChassis(ChassisState state)
@@ -940,19 +962,39 @@ public class GameController : MonoBehaviour
 
     private void displayMessage()
     {
+        if (Time.time > nextMessageTime)
+        {
+            messagePointer++;
+            nextMessageTime = Time.time + messageScrollTime;
+        }
+        if (messagePointer >= MessageList.Count)
+        {
+            messagePointer = 0;
+            nextMessageTime = Time.time + messageScrollTime;
+        }
+
         switch (gameState)
         {
+
             case GameState.SELECTION:
                 if (ScoreManager.Instance.ActivePartCount <= ScoreManager.Instance.MaxPartCount)
                 {
                     MessageText.text = SelectString;
-                } else
+                }
+                else
                 {
                     MessageText.text = TooManyString;
                 }
                 break;
-            case GameState.MOVEMENT:
-                MessageText.text = LevelString;
+            default:
+                if (MessageList.Count > 0)
+                {
+                    MessageText.text = MessageList[messagePointer];
+                }
+                else
+                {
+                    MessageText.text = LevelString;
+                }
                 break;
         }
     }

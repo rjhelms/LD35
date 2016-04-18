@@ -92,6 +92,7 @@ public class Projectile
                 if (Origin != null) // no friendly fire
                 {
                     controller.Hit(this, damage);
+                    controller.MessageList.Add("YOU ARE HIT!");
                 }
             }
             else if (next_tile.Contents == TileContents.EMPTY_TILE)
@@ -131,6 +132,7 @@ public class Projectile
                 }
                 else
                 {
+                    controller.MessageList.Add("YOUR LASER HITS!");
                     Debug.LogFormat("{0} hit by projectile from player", hit.Name);
                 }
                 Destroy();

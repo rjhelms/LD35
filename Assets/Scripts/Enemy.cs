@@ -51,6 +51,7 @@ public class Enemy
     protected void die()
     {
         Debug.LogFormat("{0} is killed!", name, hitPoints);
+        controller.MessageList.Add("ENEMY DESTROYED");
         tileMap.TileArray[PositionX, PositionY].Contents = TileContents.EMPTY_TILE;
         controller.Enemies.Remove(this);
     }
