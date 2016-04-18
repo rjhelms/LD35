@@ -9,7 +9,12 @@ public class Enemy
     protected Direction direction;
     protected TileMap tileMap;
     protected GameController controller;
+    protected string name;
 
+    public virtual string Name
+    {
+        get { return name; }
+    }
     public Enemy(int x_pos, int y_pos, TileMap map, GameController player)
     {
         Debug.Log("Base enemy constructor");
@@ -18,6 +23,7 @@ public class Enemy
         tileMap = map;
         controller = player;
         controller.Enemies.Add(this);
+        name = "Enemy";
     }
 
     public virtual void Move()
@@ -28,8 +34,8 @@ public class Enemy
     {
         tileMap.TileArray[PositionX, PositionY].Contents = TileContents.EMPTY_TILE;
         controller.Enemies.Remove(this);
-
     }
+
 }
 
 public class DumbBot : Enemy
@@ -40,16 +46,17 @@ public class DumbBot : Enemy
     {
         map.TileArray[PositionX, PositionY].Contents = TileContents.DUMB_BOT;
         direction = (Direction)Random.Range(0, 4);
+        name = "Drone";
     }
 
     public override void Move()
     {
-        Debug.Log("DumbBot move");
+        Debug.Log(Name + " move");
         float roll = Random.value;
         if (roll < turnChance)
         {
             float turnDir = 0.5f - Random.value;
-            Debug.Log("DumbBot turning");
+            Debug.Log(Name + " turning");
             if (turnDir < 0)
             {
                 direction--;
@@ -71,7 +78,7 @@ public class DumbBot : Enemy
         {
             int new_x = PositionX;
             int new_y = PositionY;
-            Debug.Log("DumbBot Walking");
+            Debug.Log(Name + " walking");
             switch (direction)
             {
                 case Direction.NORTH:
@@ -99,7 +106,7 @@ public class DumbBot : Enemy
             }
             else
             {
-                Debug.Log("DumbBot hit wall");
+                Debug.Log(Name + " hit wall");
             }
         }
 
