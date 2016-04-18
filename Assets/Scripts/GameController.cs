@@ -67,6 +67,10 @@ public class GameController : MonoBehaviour
     public Text CountText;
     public Text BatteryText;
     public Text MessageText;
+    public Text NotificationText;
+
+    public Canvas NotificationCanvas;
+
     public GameObject PrefabTileSprite;
 
     public SpriteRenderer[,] VisibleSprites;
@@ -155,10 +159,23 @@ public class GameController : MonoBehaviour
             case GameState.SELECTION:
                 doSelection();
                 break;
+            case GameState.NOTIFICATION:
+                doNotification();
+                break;
         }
 
         updateUI();
 
+    }
+
+    private void doNotification()
+    {
+        if (Input.anyKeyDown)
+        {
+            NotificationCanvas.gameObject.SetActive(false);
+            setState(GameState.MOVEMENT);
+            updateMap();
+        }
     }
     #endregion
 
@@ -200,6 +217,13 @@ public class GameController : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public void Notify(string v)
+    {
+        NotificationText.text = v;
+        NotificationCanvas.gameObject.SetActive(true);
+        setState(GameState.NOTIFICATION);
     }
     #endregion
 
@@ -246,7 +270,7 @@ public class GameController : MonoBehaviour
             ChassisText[i].color = InactiveColour;
             ChassisText[i].gameObject.SetActive(ScoreManager.Instance.ChassisAvailable[i]);
             ToolText[i].color = InactiveColour;
-            ToolText[i].gameObject.SetActive(ScoreManager.Instance.ChassisAvailable[i]);
+            ToolText[i].gameObject.SetActive(ScoreManager.Instance.ToolsAvailable[i]);
         }
 
         SensorText[(int)sensorState].color = ActiveColour;
@@ -404,7 +428,7 @@ public class GameController : MonoBehaviour
                     MadeNoiseLastMove = true;
                 }
                 if (TileMap.TileArray[PlayerXPos, PlayerYPos].Contents >= TileContents.POWERUP_BATTERY &
-                    TileMap.TileArray[PlayerXPos, PlayerYPos].Contents <= TileContents.POWERUP_HEAD_LONGRANGE)
+                    TileMap.TileArray[PlayerXPos, PlayerYPos].Contents <= TileContents.POWERUP_TOOL_PROBE)
                 {
                     getPowerUp(TileMap.TileArray[PlayerXPos, PlayerYPos]);
                 }
@@ -432,22 +456,90 @@ public class GameController : MonoBehaviour
                 }
                 break;
             case TileContents.POWERUP_HEAD_OMNI:
-                Debug.Log("Got the omni head!");
-                ScoreManager.Instance.SensorsAvailable[(int)SensorState.OMNI] = true;
-                tile.Contents = TileContents.EMPTY_TILE;
+                if (!ScoreManager.Instance.SensorsAvailable[(int)SensorState.OMNI])
+                {
+                    Debug.Log("Got the omni head!");
+                    ScoreManager.Instance.SensorsAvailable[(int)SensorState.OMNI] = true;
+                    tile.Contents = TileContents.EMPTY_TILE;
+                    Notify("FOUND THE OMNI SENSOR\r\n\r\n\r\nTHIS SENSOR CAN SEE \r\nIN ALL DIRECTIONS \r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                }
                 break;
             case TileContents.POWERUP_HEAD_IR:
-                Debug.Log("Got the infrared head!");
-                ScoreManager.Instance.SensorsAvailable[(int)SensorState.INFRARED] = true;
-                tile.Contents = TileContents.EMPTY_TILE;
+                if (!ScoreManager.Instance.SensorsAvailable[(int)SensorState.INFRARED])
+                {
+                    Debug.Log("Got the IR head!");
+                    ScoreManager.Instance.SensorsAvailable[(int)SensorState.INFRARED] = true;
+                    tile.Contents = TileContents.EMPTY_TILE;
+                    Notify("FOUND THE INFRARED SENSOR\r\n\r\n\r\nTHIS SENSOR CAN SEE \r\nTHROUGH WALLS\r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                }
                 break;
             case TileContents.POWERUP_HEAD_LONGRANGE:
-                Debug.Log("Got the longrange head!");
-                ScoreManager.Instance.SensorsAvailable[(int)SensorState.LONGRANGE] = true;
-                tile.Contents = TileContents.EMPTY_TILE;
+                if (!ScoreManager.Instance.SensorsAvailable[(int)SensorState.LONGRANGE])
+                {
+                    Debug.Log("Got the long range head!");
+                    ScoreManager.Instance.SensorsAvailable[(int)SensorState.LONGRANGE] = true;
+                    tile.Contents = TileContents.EMPTY_TILE;
+                    Notify("FOUND THE LONG RANGE \r\nSENSOR\r\n\r\nTHIS SENSOR CAN SEE \r\nONE TILE FARTHER\r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                }
+                break;
+            case TileContents.POWERUP_CHASSIS_SILENT:
+                if (!ScoreManager.Instance.ChassisAvailable[(int)ChassisState.SILENT])
+                {
+                    Debug.Log("Got the silent chassis!");
+                    ScoreManager.Instance.ChassisAvailable[(int)ChassisState.SILENT] = true;
+                    tile.Contents = TileContents.EMPTY_TILE;
+                    Notify("FOUND THE SILENT CHASSIS\r\n\r\n\r\nENEMIES WILL NOT HEAR YOU \r\nMOVING WITH THIS EQUIPPED \r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                }
+                break;
+            case TileContents.POWERUP_CHASSIS_FAST:
+                if (!ScoreManager.Instance.ChassisAvailable[(int)ChassisState.FAST])
+                {
+                    Debug.Log("Got the fast chassis!");
+                    ScoreManager.Instance.ChassisAvailable[(int)ChassisState.FAST] = true;
+                    tile.Contents = TileContents.EMPTY_TILE;
+                    Notify("FOUND THE FAST CHASSIS\r\n\r\n\r\nYOU WILL MOVE MUCH FASTER \r\nTHAN YOUR ENEMIES WITH\r\nTHIS EQUIPPED \r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                }
+                break;
+            case TileContents.POWERUP_CHASSIS_OFFROAD:
+                if (!ScoreManager.Instance.ChassisAvailable[(int)ChassisState.OFFROAD])
+                {
+                    Debug.Log("Got the offroad chassis!");
+                    ScoreManager.Instance.ChassisAvailable[(int)ChassisState.OFFROAD] = true;
+                    tile.Contents = TileContents.EMPTY_TILE;
+                    Notify("FOUND THE OFF-ROAD CHASSIS\r\n\r\n\r\nYOU CAN RUN OVER SMALL\r\nOBSTACLES WITH THIS\r\nEQUIPPED\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                }
+                break;
+            case TileContents.POWERUP_TOOL_LASER:
+                if (!ScoreManager.Instance.ToolsAvailable[(int)ToolState.LASER])
+                {
+                    Debug.Log("Got the laser!");
+                    ScoreManager.Instance.ToolsAvailable[(int)ToolState.LASER] = true;
+                    tile.Contents = TileContents.EMPTY_TILE;
+                    Notify("FOUND THE LASER \r\n\r\n\r\nYOU CAN BLAST YOUR ENEMIES\r\nTO BITS WITH THIS \r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                }
+                break;
+            case TileContents.POWERUP_TOOL_ACTUATOR:
+                if (!ScoreManager.Instance.ToolsAvailable[(int)ToolState.ACTUATOR])
+                {
+                    Debug.Log("Got the actuator!");
+                    ScoreManager.Instance.ToolsAvailable[(int)ToolState.ACTUATOR] = true;
+                    tile.Contents = TileContents.EMPTY_TILE;
+                    Notify("FOUND THE ACTUATOR\r\n\r\n\r\nYOU CAN OPEN DOORS AND USE\r\nSWITCHES WITH THIS\r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                }
+                break;
+            case TileContents.POWERUP_TOOL_PROBE:
+                if (!ScoreManager.Instance.ToolsAvailable[(int)ToolState.PROBE])
+                {
+                    Debug.Log("Got the probe!");
+                    ScoreManager.Instance.ToolsAvailable[(int)ToolState.PROBE] = true;
+                    tile.Contents = TileContents.EMPTY_TILE;
+                    Notify("FOUND THE PROBE \r\n\r\n\r\nYOU CAN DISABLE COMPUTER\r\nTERMINALS WITH THIS \r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                }
                 break;
         }
     }
+
+
 
     private void Tick()
     {
@@ -575,7 +667,7 @@ public class GameController : MonoBehaviour
                 }
                 else if (pointerPosition >= 8)
                 {
-                    if (ScoreManager.Instance.ToolsAvailalbe[pointerPosition - 8])
+                    if (ScoreManager.Instance.ToolsAvailable[pointerPosition - 8])
                         validPointerPosition = true;
                     else pointerPosition++;
                 }
@@ -606,7 +698,7 @@ public class GameController : MonoBehaviour
                 }
                 else if (pointerPosition >= 8)
                 {
-                    if (ScoreManager.Instance.ToolsAvailalbe[pointerPosition - 8])
+                    if (ScoreManager.Instance.ToolsAvailable[pointerPosition - 8])
                         validPointerPosition = true;
                     else pointerPosition--;
                 }

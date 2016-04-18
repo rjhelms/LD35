@@ -821,7 +821,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: CONFIGURING BOT, TAB WHEN DONE
+  m_Text: 'CONFIGURING BOT: TAB WHEN DONE'
 --- !u!222 &539576791
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -990,6 +990,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Levels:
+  - {fileID: 4900000, guid: 63ec34c9be1506c419d25cb3ed82c9f9, type: 3}
   - {fileID: 4900000, guid: 7de2786381a388f4882e34561b1597a4, type: 3}
   LevelFolder: Levels\
   Controller: {fileID: 1554982843}
@@ -1706,7 +1707,7 @@ GameObject:
   - 222: {fileID: 1348511555}
   - 114: {fileID: 1348511554}
   m_Layer: 0
-  m_Name: PowerUpText
+  m_Name: NotificationText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1741,7 +1742,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6666667, g: 0.6666667, b: 0.6666667, a: 1}
+  m_Color: {r: 0, g: 0.61960787, b: 0.9176471, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1820,7 +1821,7 @@ GameObject:
   - 114: {fileID: 1356499311}
   - 114: {fileID: 1356499310}
   m_Layer: 0
-  m_Name: PowerUpCanvas
+  m_Name: NotificationCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2132,6 +2133,8 @@ MonoBehaviour:
   CountText: {fileID: 701587772}
   BatteryText: {fileID: 1220014110}
   MessageText: {fileID: 539576790}
+  NotificationText: {fileID: 1348511554}
+  NotificationCanvas: {fileID: 1356499312}
   PrefabTileSprite: {fileID: 102722, guid: a2471701772e29340bf396e07b4373d7, type: 2}
   VisibleSpritesParent: {fileID: 724078933}
   EGAMode: 1
@@ -2141,7 +2144,8 @@ MonoBehaviour:
   StartingHitPoints: 100
   MaxHitPoints: 150
   PlayerLaserDamage: 10
-  MadeNoistLastMove: 0
+  BatteryHitPoints: 50
+  MadeNoiseLastMove: 0
 --- !u!4 &1554982844
 Transform:
   m_ObjectHideFlags: 0
@@ -2273,6 +2277,12 @@ MonoBehaviour:
   - {fileID: 21300040, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
   - {fileID: 21300044, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
   - {fileID: 21300048, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
+  - {fileID: 21300052, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
+  - {fileID: 21300056, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
+  - {fileID: 21300060, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
+  - {fileID: 21300064, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
+  - {fileID: 21300068, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
+  - {fileID: 21300072, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
   EGAInvisibleSprites:
   - {fileID: 21300002, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
   - {fileID: 21300006, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
@@ -2288,6 +2298,12 @@ MonoBehaviour:
   - {fileID: 21300042, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
   - {fileID: 21300046, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
   - {fileID: 21300050, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
+  - {fileID: 21300054, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
+  - {fileID: 21300058, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
+  - {fileID: 21300062, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
+  - {fileID: 21300066, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
+  - {fileID: 21300070, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
+  - {fileID: 21300074, guid: a910a4d02bf1cb24ab2731138357b148, type: 3}
   EGADirectionalHead:
   - {fileID: 21300000, guid: 2577c58b8be79514e96548524c465d3e, type: 3}
   - {fileID: 21300002, guid: 2577c58b8be79514e96548524c465d3e, type: 3}

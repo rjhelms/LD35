@@ -23,7 +23,7 @@ public class LevelLoader : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        string[] levelDef = Regex.Split(Levels[0].ToString(), "\r\n");
+        string[] levelDef = Regex.Split(Levels[ScoreManager.Instance.CurrentLevel].ToString(), "\r\n");
         int level_x = int.Parse(levelDef[0]);
         int level_y = int.Parse(levelDef[1]);
         levelTileMap = new TileMap(level_x, level_y);

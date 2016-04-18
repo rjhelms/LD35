@@ -37,12 +37,49 @@ for each channel
 powerup info panel:
 26 x 21
 
-can use CENTER alignment, but ensure:
-    even number of characters on each line
-    odd # of lines
-    
+	can use CENTER alignment, but ensure:
+	    even number of characters on each line
+	    odd # of lines
+
+notification process:
+	- call Notify on controller - pass in string for notification
+	- Notify displays panel, sets text to it, sets timer, and sets state to GameState.NOTIFICATION
+	- when state is in GameState.Notification, Update runs doNotification:
+		if time greater than timer, check for input
+		on input, remove panel and set state to GameState.MOVEMENT
+	    
 level 1:
 get laser, find exist
 
 level 2:
 get past bots
+
+omni notification:
+"FOUND THE OMNI SENSOR\r\n\r\n\r\nTHIS SENSOR CAN SEE \r\nIN ALL DIRECTIONS \r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE "
+ir notification:
+"FOUND THE INFRARED SENSOR\r\n\r\n\r\nTHIS SENSOR CAN SEE \r\nTHROUGH WALLS\r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE "
+long-range notification
+"FOUND THE LONG RANGE \r\nSENSOR\r\n\r\nTHIS SENSOR CAN SEE \r\nONE TILE FARTHER\r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE "
+
+chassis:
+silent:
+"FOUND THE SILENT CHASSIS\r\n\r\n\r\nENEMIES WILL NOT HEAR YOU \r\nMOVING WITH THIS EQUIPPED \r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE "
+
+fast:
+"FOUND THE FAST CHASSIS\r\n\r\n\r\nYOU WILL MOVE MUCH FASTER \r\nTHAN YOUR ENEMIES WITH\r\nTHIS EQUIPPED \r\n\r\n\r\nPRESS ANY KEY TO CONTINUE "
+offroad:
+"FOUND THE OFF-ROAD CHASSIS\r\n\r\n\r\nYOU CAN RUN OVER SMALL\r\nOBSTACLES WITH THIS\r\nEQUIPPED\r\n\r\nPRESS ANY KEY TO CONTINUE "
+tools:
+laser
+
+"FOUND THE LASER \r\n\r\n\r\nYOU CAN BLAST YOUR ENEMIES\r\nTO BITS WITH THIS \r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE "
+actuator
+
+"FOUND THE ACTUATOR\r\n\r\n\r\nYOU CAN OPEN DOORS AND USE\r\nSWITCHES WITH THIS\r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE "
+
+
+probe
+12345678901234567890123456
+"FOUND THE PROBE \r\n\r\n\r\nYOU CAN DISABLE COMPUTER\r\nTERMINALS WITH THIS \r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE "
+laser notification:
+"FOUND A LASER \r\n\r\n\r\nNOW YOU CAN FIGHT \r\nYOUR WAY OUT OF HERE\r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE "

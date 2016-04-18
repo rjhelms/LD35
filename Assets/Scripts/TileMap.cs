@@ -14,6 +14,12 @@
     POWERUP_HEAD_OMNI,
     POWERUP_HEAD_IR,
     POWERUP_HEAD_LONGRANGE,
+    POWERUP_CHASSIS_SILENT,
+    POWERUP_CHASSIS_FAST,
+    POWERUP_CHASSIS_OFFROAD,
+    POWERUP_TOOL_LASER,
+    POWERUP_TOOL_ACTUATOR,
+    POWERUP_TOOL_PROBE,
 }
 
 public class Tile
@@ -65,6 +71,18 @@ public class Tile
                 return true;
             case TileContents.POWERUP_HEAD_LONGRANGE:
                 return true;
+            case TileContents.POWERUP_CHASSIS_SILENT:
+                return true;
+            case TileContents.POWERUP_CHASSIS_FAST:
+                return true;
+            case TileContents.POWERUP_CHASSIS_OFFROAD:
+                return true;
+            case TileContents.POWERUP_TOOL_LASER:
+                return true;
+            case TileContents.POWERUP_TOOL_ACTUATOR:
+                return true;
+            case TileContents.POWERUP_TOOL_PROBE:
+                return true;
             default:
                 return false;
         }
@@ -95,6 +113,18 @@ public class Tile
             case TileContents.POWERUP_HEAD_IR:
                 return true;
             case TileContents.POWERUP_HEAD_LONGRANGE:
+                return true;
+            case TileContents.POWERUP_CHASSIS_SILENT:
+                return true;
+            case TileContents.POWERUP_CHASSIS_FAST:
+                return true;
+            case TileContents.POWERUP_CHASSIS_OFFROAD:
+                return true;
+            case TileContents.POWERUP_TOOL_LASER:
+                return true;
+            case TileContents.POWERUP_TOOL_ACTUATOR:
+                return true;
+            case TileContents.POWERUP_TOOL_PROBE:
                 return true;
             default:
                 return false;
