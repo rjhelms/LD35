@@ -402,9 +402,9 @@ public class GameController : MonoBehaviour
                 case ToolState.NONE:
                     break;
                 case ToolState.LASER:
+                    MessageList.Clear();
                     if (playerFire())
                     {
-                        MessageList.Clear();
                         moved = true;
                     }
                     break;
