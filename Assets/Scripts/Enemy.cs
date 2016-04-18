@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class Enemy
@@ -40,7 +41,8 @@ public class Enemy
         if (hitPoints <= 0)
         {
             die();
-        } else
+        }
+        else
         {
             Debug.LogFormat("{0} has {1} hit points", name, hitPoints);
         }
@@ -75,10 +77,12 @@ public class Enemy
         if (controller.PlayerXPos == facing_x & controller.PlayerYPos == facing_y)
         {
             controller.Hit(this, damage);
-        } else if (tileMap.TileArray[facing_x, facing_y].Contents == TileContents.EMPTY_TILE)
+        }
+        else if (tileMap.TileArray[facing_x, facing_y].Contents == TileContents.EMPTY_TILE)
         {
             new Projectile(facing_x, facing_y, controller, tileMap, direction, this, damage);
-        } else
+        }
+        else
         {
             Debug.LogFormat("{0} fire at ({1}, {2}) blocked by level", name, facing_x, facing_y);
         }
@@ -92,21 +96,29 @@ public class DumbBot : Enemy
     private float turnChance = 0.25f;
     private float walkChance = 0.75f;
     private float fireChance = 0.80f;
+    private int coolDown;
     public DumbBot(int x_pos, int y_pos, TileMap map, GameController player) : base(x_pos, y_pos, map, player)
     {
         map.TileArray[PositionX, PositionY].Contents = TileContents.DUMB_BOT;
-        direction = (Direction)Random.Range(0, 4);
+        direction = (Direction)UnityEngine.Random.Range(0, 4);
         name = "Drone";
         damage = 5;
         hitPoints = 10;
+        coolDown = 0;
     }
 
     public override void Move()
     {
-        float roll = Random.value;
+        if (coolDown > 0)   // cooldown if fired last turn
+        {
+            Debug.LogFormat("{0} at {1}, {2} cooling down", name, PositionX, PositionY);
+            coolDown--;
+            return;
+        }
+        float roll = UnityEngine.Random.value;
         if (roll < turnChance)
         {
-            float turnDir = 0.5f - Random.value;
+            float turnDir = 0.5f - UnityEngine.Random.value;
             if (turnDir < 0)
             {
                 direction--;
@@ -158,6 +170,7 @@ public class DumbBot : Enemy
         else if (roll < fireChance)
         {
             fire();
+            coolDown = 1;
         }
 
     }
@@ -166,6 +179,7 @@ public class DumbBot : Enemy
 public class Sentinel : Enemy
 {
     private int turnState;
+    private int coolDown;
     public Sentinel(int x_pos, int y_pos, TileMap map, GameController player, Direction dir) : base(x_pos, y_pos, map, player)
     {
         if (dir == Direction.EAST | dir == Direction.WEST)
@@ -184,6 +198,14 @@ public class Sentinel : Enemy
 
     public override void Move()
     {
+        if (coolDown > 0)   // cooldown if fired last turn
+        {
+            Debug.LogFormat("{0} at {1}, {2} cooling down", name, PositionX, PositionY);
+            coolDown--;
+            return;
+        }
+
+        // check for line of sight for player
         int facing_x = 0;
         int facing_y = 0;
         switch (direction)
@@ -210,6 +232,7 @@ public class Sentinel : Enemy
             check_tile_y += facing_y;
             if (controller.PlayerXPos == check_tile_x & controller.PlayerYPos == check_tile_y)
             {
+                Debug.LogFormat("{2} at {0}, {1} has line of sight", PositionX, PositionY, name);
                 to_fire = true;
             }
             else if (!tileMap.TileArray[check_tile_x, check_tile_y].CanSeeThrough())
@@ -217,8 +240,19 @@ public class Sentinel : Enemy
                 break;
             }
         }
+
+        // check sound for a player
+        if (controller.MadeNoistLastMove)
+        {
+            if (Math.Abs(PositionX - controller.PlayerXPos) + Math.Abs(PositionY - controller.PlayerYPos) <= 3)
+                {
+                Debug.LogFormat("{2} at {0}, {1} heard the player", PositionX, PositionY, name);
+                to_fire = true;
+            }
+        }
         if (to_fire)
         {
+            coolDown = 2;
             fire();
             return;
         }
@@ -264,7 +298,7 @@ public class Sentinel : Enemy
             }
             else
             {
-                float turn_roll = Random.value;
+                float turn_roll = UnityEngine.Random.value;
                 if (turn_roll < 0.5f)
                 {
                     turnState = -2;
