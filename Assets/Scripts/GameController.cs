@@ -86,8 +86,8 @@ public class GameController : MonoBehaviour
     public int StartingHitPoints = 100;
     public int MaxHitPoints = 150;
     public int PlayerLaserDamage = 10;
-
-    public bool MadeNoistLastMove = false;
+    public int BatteryHitPoints = 50;
+    public bool MadeNoiseLastMove = false;
     #endregion
 
     #region Private Attributes
@@ -107,7 +107,6 @@ public class GameController : MonoBehaviour
     private int activeCount = 0;
     private int maxCount = 1;
     private int pointerPosition;
-    private int currentHitPoints;
     private int lastPlayerTick;
     private int globalTick = 0;
     #endregion
@@ -402,13 +401,51 @@ public class GameController : MonoBehaviour
                 Tick();
                 if (chassisState != ChassisState.SILENT)
                 {
-                    MadeNoistLastMove = true;
+                    MadeNoiseLastMove = true;
+                }
+                if (TileMap.TileArray[PlayerXPos, PlayerYPos].Contents >= TileContents.POWERUP_BATTERY &
+                    TileMap.TileArray[PlayerXPos, PlayerYPos].Contents <= TileContents.POWERUP_HEAD_LONGRANGE)
+                {
+                    getPowerUp(TileMap.TileArray[PlayerXPos, PlayerYPos]);
                 }
             }
             else
             {
                 TileMap.TileArray[new_x_pos, new_y_pos].SetVisible();
             }
+        }
+    }
+
+    private void getPowerUp(Tile tile)
+    {
+        switch (tile.Contents)
+        {
+            case TileContents.POWERUP_BATTERY:
+                if (ScoreManager.Instance.HitPoints < MaxHitPoints)
+                {
+                    Debug.Log("Got a battery!");
+                    ScoreManager.Instance.HitPoints += BatteryHitPoints;
+                    tile.Contents = TileContents.EMPTY_TILE;
+                } else
+                {
+                    Debug.Log("Found a battery, but already fully charged.");
+                }
+                break;
+            case TileContents.POWERUP_HEAD_OMNI:
+                Debug.Log("Got the omni head!");
+                ScoreManager.Instance.SensorsAvailable[(int)SensorState.OMNI] = true;
+                tile.Contents = TileContents.EMPTY_TILE;
+                break;
+            case TileContents.POWERUP_HEAD_IR:
+                Debug.Log("Got the infrared head!");
+                ScoreManager.Instance.SensorsAvailable[(int)SensorState.INFRARED] = true;
+                tile.Contents = TileContents.EMPTY_TILE;
+                break;
+            case TileContents.POWERUP_HEAD_LONGRANGE:
+                Debug.Log("Got the longrange head!");
+                ScoreManager.Instance.SensorsAvailable[(int)SensorState.LONGRANGE] = true;
+                tile.Contents = TileContents.EMPTY_TILE;
+                break;
         }
     }
 
@@ -426,6 +463,11 @@ public class GameController : MonoBehaviour
             Projectiles[i].Move();
         }
 
+        // battery over 100% fades each tick
+        if (ScoreManager.Instance.HitPoints > 100)
+        {
+            ScoreManager.Instance.HitPoints--;
+        }
         updateMap();
     }
 
@@ -453,7 +495,7 @@ public class GameController : MonoBehaviour
             if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.EMPTY_TILE)
             {
                 new Projectile(PlayerXPos, PlayerYPos, this, TileMap, direction, null, PlayerLaserDamage);
-                MadeNoistLastMove = true;
+                MadeNoiseLastMove = true;
                 moved = true;
             }
             else if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.DUMB_BOT |
@@ -463,7 +505,7 @@ public class GameController : MonoBehaviour
                 Enemy hit = GetEnemyAtTile(facing_x, facing_y);
                 Debug.Log("Player hit " + hit.Name + " directly");
                 hit.Hit(PlayerLaserDamage);
-                MadeNoistLastMove = true;
+                MadeNoiseLastMove = true;
                 moved = true;
             }
             else if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_N |
@@ -474,7 +516,7 @@ public class GameController : MonoBehaviour
                 Projectile hit = GetProjectileAtTile(facing_x, facing_y);
                 Debug.Log("Player destroyed projectile directly");
                 hit.Destroy();
-                MadeNoistLastMove = true;
+                MadeNoiseLastMove = true;
                 moved = true;
                 doEnemyMovement();
             }
@@ -489,13 +531,13 @@ public class GameController : MonoBehaviour
         {
             playerTick = 0;
             lastPlayerTick = 0;
-            Debug.LogFormat("Processing enemy moves, noise {0}", MadeNoistLastMove);
+            Debug.LogFormat("Processing enemy moves, noise {0}", MadeNoiseLastMove);
             for (int i = Enemies.Count - 1; i >= 0; i--)
             {
                 Enemies[i].Move();
             }
 
-            MadeNoistLastMove = false;
+            MadeNoiseLastMove = false;
         }
     }
 
@@ -631,7 +673,6 @@ public class GameController : MonoBehaviour
         setTool(ToolState.NONE);
         gameState = GameState.MOVEMENT;
         playerTick = 0;
-        currentHitPoints = StartingHitPoints;
         for (int x = -1; x < 2; x++)
         {
             for (int y = -1; y < 2; y++)

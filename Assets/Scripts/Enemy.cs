@@ -242,7 +242,7 @@ public class Sentinel : Enemy
         }
 
         // check sound for a player
-        if (controller.MadeNoistLastMove)
+        if (controller.MadeNoiseLastMove)
         {
             if (Math.Abs(PositionX - controller.PlayerXPos) + Math.Abs(PositionY - controller.PlayerYPos) <= 3)
                 {
