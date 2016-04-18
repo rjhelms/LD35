@@ -57,6 +57,29 @@ public class Tile
                 return false;
         }
     }
+
+    public bool CanSeeThrough()
+    {
+        switch (Contents)
+        {
+            case TileContents.EMPTY_TILE:
+                return true;
+            case TileContents.WALL:
+                return false;
+            case TileContents.EXIT_STAIRS:
+                return true;
+            case TileContents.LASER_E:
+                return true;
+            case TileContents.LASER_N:
+                return true;
+            case TileContents.LASER_S:
+                return true;
+            case TileContents.LASER_W:
+                return true;
+            default:
+                return false;
+        }
+    }
 }
 
 public class TileMap

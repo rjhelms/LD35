@@ -212,7 +212,7 @@ public class Sentinel : Enemy
             {
                 to_fire = true;
             }
-            else if (tileMap.TileArray[check_tile_x, check_tile_y].Contents != TileContents.EMPTY_TILE)
+            else if (!tileMap.TileArray[check_tile_x, check_tile_y].CanSeeThrough())
             {
                 break;
             }

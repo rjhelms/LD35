@@ -54,27 +54,27 @@ public class DirectionalSensor : Sensor
         if (scan_x != 0)
         {
             tileMap.TileArray[x_pos + scan_x, y_pos].SetVisible();
-            if (tileMap.TileArray[x_pos + scan_x, y_pos].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos + scan_x, y_pos].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos + 2 * scan_x, y_pos].SetVisible();
             }
             tileMap.TileArray[x_pos + scan_x, y_pos - 1].SetVisible();
-            if (tileMap.TileArray[x_pos + scan_x, y_pos - 1].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos + scan_x, y_pos - 1].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos + 2 * scan_x, y_pos - 2].SetVisible();
             }
             tileMap.TileArray[x_pos + scan_x, y_pos + 1].SetVisible();
-            if (tileMap.TileArray[x_pos + scan_x, y_pos + 1].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos + scan_x, y_pos + 1].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos + 2 * scan_x, y_pos + 2].SetVisible();
             }
-            if (tileMap.TileArray[x_pos + scan_x, y_pos].Contents == TileContents.EMPTY_TILE |
-                tileMap.TileArray[x_pos + scan_x, y_pos + 1].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos + scan_x, y_pos].CanSeeThrough() |
+                tileMap.TileArray[x_pos + scan_x, y_pos + 1].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos + 2 * scan_x, y_pos + 1].SetVisible();
             }
-            if (tileMap.TileArray[x_pos + scan_x, y_pos].Contents == TileContents.EMPTY_TILE |
-                tileMap.TileArray[x_pos + scan_x, y_pos - 1].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos + scan_x, y_pos].CanSeeThrough() |
+                tileMap.TileArray[x_pos + scan_x, y_pos - 1].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos + 2 * scan_x, y_pos - 1].SetVisible();
             }
@@ -82,27 +82,27 @@ public class DirectionalSensor : Sensor
         else if (scan_y != 0)
         {
             tileMap.TileArray[x_pos, y_pos + scan_y].SetVisible();
-            if (tileMap.TileArray[x_pos, y_pos + scan_y].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos, y_pos + scan_y].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos, y_pos + 2 * scan_y].SetVisible();
             }
             tileMap.TileArray[x_pos - 1, y_pos + scan_y].SetVisible();
-            if (tileMap.TileArray[x_pos - 1, y_pos + scan_y].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos - 1, y_pos + scan_y].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos - 2, y_pos + 2 * scan_y].SetVisible();
             }
             tileMap.TileArray[x_pos + 1, y_pos + scan_y].SetVisible();
-            if (tileMap.TileArray[x_pos + 1, y_pos + scan_y].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos + 1, y_pos + scan_y].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos + 2, y_pos + 2 * scan_y].SetVisible();
             }
             if (tileMap.TileArray[x_pos, y_pos + scan_y].Contents == TileContents.EMPTY_TILE |
-                tileMap.TileArray[x_pos + 1, y_pos + scan_y].Contents == TileContents.EMPTY_TILE)
+                tileMap.TileArray[x_pos + 1, y_pos + scan_y].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos + 1, y_pos + 2 * scan_y].SetVisible();
             }
             if (tileMap.TileArray[x_pos, y_pos + scan_y].Contents == TileContents.EMPTY_TILE |
-                tileMap.TileArray[x_pos - 1, y_pos + scan_y].Contents == TileContents.EMPTY_TILE)
+                tileMap.TileArray[x_pos - 1, y_pos + scan_y].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos - 1, y_pos + 2 * scan_y].SetVisible();
             }
@@ -130,48 +130,48 @@ public class OmniSensor : Sensor
         tileMap.TileArray[x_pos, y_pos + 1].SetVisible();
         tileMap.TileArray[x_pos + 1, y_pos + 1].SetVisible();
 
-        if (tileMap.TileArray[x_pos, y_pos - 1].Contents == TileContents.EMPTY_TILE)
+        if (tileMap.TileArray[x_pos, y_pos - 1].CanSeeThrough())
             tileMap.TileArray[x_pos, y_pos - 2].SetVisible();
 
-        if (tileMap.TileArray[x_pos, y_pos + 1].Contents == TileContents.EMPTY_TILE)
+        if (tileMap.TileArray[x_pos, y_pos + 1].CanSeeThrough())
             tileMap.TileArray[x_pos, y_pos + 2].SetVisible();
 
-        if (tileMap.TileArray[x_pos - 1, y_pos].Contents == TileContents.EMPTY_TILE)
+        if (tileMap.TileArray[x_pos - 1, y_pos].CanSeeThrough())
             tileMap.TileArray[x_pos - 2, y_pos].SetVisible();
 
-        if (tileMap.TileArray[x_pos + 1, y_pos].Contents == TileContents.EMPTY_TILE)
+        if (tileMap.TileArray[x_pos + 1, y_pos].CanSeeThrough())
             tileMap.TileArray[x_pos + 2, y_pos].SetVisible();
 
-        if (tileMap.TileArray[x_pos - 1, y_pos - 1].Contents == TileContents.EMPTY_TILE |
-            tileMap.TileArray[x_pos, y_pos - 1].Contents == TileContents.EMPTY_TILE)
+        if (tileMap.TileArray[x_pos - 1, y_pos - 1].CanSeeThrough() |
+            tileMap.TileArray[x_pos, y_pos - 1].CanSeeThrough())
             tileMap.TileArray[x_pos - 1, y_pos - 2].SetVisible();
 
-        if (tileMap.TileArray[x_pos + 1, y_pos - 1].Contents == TileContents.EMPTY_TILE |
-            tileMap.TileArray[x_pos, y_pos - 1].Contents == TileContents.EMPTY_TILE)
+        if (tileMap.TileArray[x_pos + 1, y_pos - 1].CanSeeThrough() |
+            tileMap.TileArray[x_pos, y_pos - 1].CanSeeThrough())
             tileMap.TileArray[x_pos + 1, y_pos - 2].SetVisible();
 
-        if (tileMap.TileArray[x_pos - 1, y_pos + 1].Contents == TileContents.EMPTY_TILE |
-            tileMap.TileArray[x_pos, y_pos + 1].Contents == TileContents.EMPTY_TILE)
+        if (tileMap.TileArray[x_pos - 1, y_pos + 1].CanSeeThrough() |
+            tileMap.TileArray[x_pos, y_pos + 1].CanSeeThrough())
             tileMap.TileArray[x_pos - 1, y_pos + 2].SetVisible();
 
-        if (tileMap.TileArray[x_pos + 1, y_pos + 1].Contents == TileContents.EMPTY_TILE |
-            tileMap.TileArray[x_pos, y_pos + 1].Contents == TileContents.EMPTY_TILE)
+        if (tileMap.TileArray[x_pos + 1, y_pos + 1].CanSeeThrough() |
+            tileMap.TileArray[x_pos, y_pos + 1].CanSeeThrough())
             tileMap.TileArray[x_pos + 1, y_pos + 2].SetVisible();
 
-        if (tileMap.TileArray[x_pos - 1, y_pos - 1].Contents == TileContents.EMPTY_TILE |
-            tileMap.TileArray[x_pos - 1, y_pos].Contents == TileContents.EMPTY_TILE)
+        if (tileMap.TileArray[x_pos - 1, y_pos - 1].CanSeeThrough() |
+            tileMap.TileArray[x_pos - 1, y_pos].CanSeeThrough())
             tileMap.TileArray[x_pos - 2, y_pos - 1].SetVisible();
 
-        if (tileMap.TileArray[x_pos - 1, y_pos + 1].Contents == TileContents.EMPTY_TILE |
-            tileMap.TileArray[x_pos - 1, y_pos].Contents == TileContents.EMPTY_TILE)
+        if (tileMap.TileArray[x_pos - 1, y_pos + 1].CanSeeThrough() |
+            tileMap.TileArray[x_pos - 1, y_pos].CanSeeThrough())
             tileMap.TileArray[x_pos - 2, y_pos + 1].SetVisible();
 
-        if (tileMap.TileArray[x_pos + 1, y_pos - 1].Contents == TileContents.EMPTY_TILE |
-            tileMap.TileArray[x_pos + 1, y_pos].Contents == TileContents.EMPTY_TILE)
+        if (tileMap.TileArray[x_pos + 1, y_pos - 1].CanSeeThrough() |
+            tileMap.TileArray[x_pos + 1, y_pos].CanSeeThrough())
             tileMap.TileArray[x_pos + 2, y_pos - 1].SetVisible();
 
-        if (tileMap.TileArray[x_pos + 1, y_pos + 1].Contents == TileContents.EMPTY_TILE |
-            tileMap.TileArray[x_pos + 1, y_pos].Contents == TileContents.EMPTY_TILE)
+        if (tileMap.TileArray[x_pos + 1, y_pos + 1].CanSeeThrough() |
+            tileMap.TileArray[x_pos + 1, y_pos].CanSeeThrough())
             tileMap.TileArray[x_pos + 2, y_pos + 1].SetVisible();
     }
 }
@@ -290,41 +290,41 @@ public class LongRangeSensor : Sensor
         if (scan_x != 0)
         {
             tileMap.TileArray[x_pos + scan_x, y_pos].SetVisible();
-            if (tileMap.TileArray[x_pos + scan_x, y_pos].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos + scan_x, y_pos].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos + 2 * scan_x, y_pos].SetVisible();
-                if (tileMap.TileArray[x_pos + 2 * scan_x, y_pos].Contents == TileContents.EMPTY_TILE)
+                if (tileMap.TileArray[x_pos + 2 * scan_x, y_pos].CanSeeThrough())
                     tileMap.TileArray[x_pos + 3 * scan_x, y_pos].SetVisible();
             }
             tileMap.TileArray[x_pos + scan_x, y_pos - 1].SetVisible();
-            if (tileMap.TileArray[x_pos + scan_x, y_pos - 1].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos + scan_x, y_pos - 1].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos + 2 * scan_x, y_pos - 2].SetVisible();
-                if (tileMap.TileArray[x_pos + 2 * scan_x, y_pos - 2].Contents == TileContents.EMPTY_TILE)
+                if (tileMap.TileArray[x_pos + 2 * scan_x, y_pos - 2].CanSeeThrough())
                     tileMap.TileArray[x_pos + 3 * scan_x, y_pos - 3].SetVisible();
             }
             tileMap.TileArray[x_pos + scan_x, y_pos + 1].SetVisible();
-            if (tileMap.TileArray[x_pos + scan_x, y_pos + 1].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos + scan_x, y_pos + 1].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos + 2 * scan_x, y_pos + 2].SetVisible();
-                if (tileMap.TileArray[x_pos + 2 * scan_x, y_pos + 2].Contents == TileContents.EMPTY_TILE)
+                if (tileMap.TileArray[x_pos + 2 * scan_x, y_pos + 2].CanSeeThrough())
                     tileMap.TileArray[x_pos + 3 * scan_x, y_pos + 3].SetVisible();
             }
-            if (tileMap.TileArray[x_pos + scan_x, y_pos].Contents == TileContents.EMPTY_TILE |
-                tileMap.TileArray[x_pos + scan_x, y_pos + 1].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos + scan_x, y_pos].CanSeeThrough() |
+                tileMap.TileArray[x_pos + scan_x, y_pos + 1].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos + 2 * scan_x, y_pos + 1].SetVisible();
-                if (tileMap.TileArray[x_pos + 2 * scan_x, y_pos + 1].Contents == TileContents.EMPTY_TILE)
+                if (tileMap.TileArray[x_pos + 2 * scan_x, y_pos + 1].CanSeeThrough())
                 {
                     tileMap.TileArray[x_pos + 3 * scan_x, y_pos + 1].SetVisible();
                     tileMap.TileArray[x_pos + 3 * scan_x, y_pos + 2].SetVisible();
                 }
             }
-            if (tileMap.TileArray[x_pos + scan_x, y_pos].Contents == TileContents.EMPTY_TILE |
-                tileMap.TileArray[x_pos + scan_x, y_pos - 1].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos + scan_x, y_pos].CanSeeThrough() |
+                tileMap.TileArray[x_pos + scan_x, y_pos - 1].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos + 2 * scan_x, y_pos - 1].SetVisible();
-                if (tileMap.TileArray[x_pos + 2 * scan_x, y_pos - 1].Contents == TileContents.EMPTY_TILE)
+                if (tileMap.TileArray[x_pos + 2 * scan_x, y_pos - 1].CanSeeThrough())
                 {
                     tileMap.TileArray[x_pos + 3 * scan_x, y_pos - 1].SetVisible();
                     tileMap.TileArray[x_pos + 3 * scan_x, y_pos - 2].SetVisible();
@@ -334,41 +334,41 @@ public class LongRangeSensor : Sensor
         else if (scan_y != 0)
         {
             tileMap.TileArray[x_pos, y_pos + scan_y].SetVisible();
-            if (tileMap.TileArray[x_pos, y_pos + scan_y].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos, y_pos + scan_y].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos, y_pos + 2 * scan_y].SetVisible();
-                if (tileMap.TileArray[x_pos, y_pos + 2 * scan_y].Contents == TileContents.EMPTY_TILE)
+                if (tileMap.TileArray[x_pos, y_pos + 2 * scan_y].CanSeeThrough())
                     tileMap.TileArray[x_pos, y_pos + 3 * scan_y].SetVisible();
             }
             tileMap.TileArray[x_pos - 1, y_pos + scan_y].SetVisible();
-            if (tileMap.TileArray[x_pos - 1, y_pos + scan_y].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos - 1, y_pos + scan_y].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos - 2, y_pos + 2 * scan_y].SetVisible();
-                if (tileMap.TileArray[x_pos - 2, y_pos + 2 * scan_y].Contents == TileContents.EMPTY_TILE)
+                if (tileMap.TileArray[x_pos - 2, y_pos + 2 * scan_y].CanSeeThrough())
                     tileMap.TileArray[x_pos - 3, y_pos + 3 * scan_y].SetVisible();
             }
             tileMap.TileArray[x_pos + 1, y_pos + scan_y].SetVisible();
-            if (tileMap.TileArray[x_pos + 1, y_pos + scan_y].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos + 1, y_pos + scan_y].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos + 2, y_pos + 2 * scan_y].SetVisible();
-                if (tileMap.TileArray[x_pos + 2, y_pos + 2 * scan_y].Contents == TileContents.EMPTY_TILE)
+                if (tileMap.TileArray[x_pos + 2, y_pos + 2 * scan_y].CanSeeThrough())
                     tileMap.TileArray[x_pos + 3, y_pos + 3 * scan_y].SetVisible();
             }
-            if (tileMap.TileArray[x_pos, y_pos + scan_y].Contents == TileContents.EMPTY_TILE |
-                tileMap.TileArray[x_pos + 1, y_pos + scan_y].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos, y_pos + scan_y].CanSeeThrough() |
+                tileMap.TileArray[x_pos + 1, y_pos + scan_y].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos + 1, y_pos + 2 * scan_y].SetVisible();
-                if (tileMap.TileArray[x_pos + 1, y_pos + 2 * scan_y].Contents == TileContents.EMPTY_TILE)
+                if (tileMap.TileArray[x_pos + 1, y_pos + 2 * scan_y].CanSeeThrough())
                 {
                     tileMap.TileArray[x_pos + 1, y_pos + 3 * scan_y].SetVisible();
                     tileMap.TileArray[x_pos + 2, y_pos + 3 * scan_y].SetVisible();
                 }
             }
-            if (tileMap.TileArray[x_pos, y_pos + scan_y].Contents == TileContents.EMPTY_TILE |
-                tileMap.TileArray[x_pos - 1, y_pos + scan_y].Contents == TileContents.EMPTY_TILE)
+            if (tileMap.TileArray[x_pos, y_pos + scan_y].CanSeeThrough() |
+                tileMap.TileArray[x_pos - 1, y_pos + scan_y].CanSeeThrough())
             {
                 tileMap.TileArray[x_pos - 1, y_pos + 2 * scan_y].SetVisible();
-                if (tileMap.TileArray[x_pos - 1, y_pos + 2 * scan_y].Contents == TileContents.EMPTY_TILE)
+                if (tileMap.TileArray[x_pos - 1, y_pos + 2 * scan_y].CanSeeThrough())
                 {
                     tileMap.TileArray[x_pos - 1, y_pos + 3 * scan_y].SetVisible();
                     tileMap.TileArray[x_pos - 2, y_pos + 3 * scan_y].SetVisible();
