@@ -331,46 +331,20 @@ public class GameController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            int facing_x = PlayerXPos;
-            int facing_y = PlayerYPos;
-            switch (direction)
+            switch (toolState)
             {
-                case Direction.NORTH:
-                    facing_y++;
+                case ToolState.NONE:
                     break;
-                case Direction.EAST:
-                    facing_x++;
+                case ToolState.LASER:
+                    if (PlayerFire())
+                        moved = true;
                     break;
-                case Direction.SOUTH:
-                    facing_y--;
+                case ToolState.ACTUATOR:
                     break;
-                case Direction.WEST:
-                    facing_x--;
+                case ToolState.PROBE:
                     break;
-            }
-            {
-                if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.EMPTY_TILE)
-                {
-                    var projectile = new Projectile(PlayerXPos, PlayerYPos, this, TileMap, direction, null);
-                    moved = true;
-                } else if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.DUMB_BOT | 
-                           TileMap.TileArray[facing_x, facing_y].Contents == TileContents.SENTINEL_BOT_EW |
-                           TileMap.TileArray[facing_x, facing_y].Contents == TileContents.SENTINEL_BOT_NS)
-                {
-                    Enemy hit = GetEnemyAtTile(facing_x, facing_y);
-                    Debug.Log("Player hit " + hit.Name + " directly");
-                    hit.Die();
-                    moved = true;
-                } else if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_N |
-                           TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_E |
-                           TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_S |
-                           TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_W)
-                {
-                    Projectile hit = GetProjectileAtTile(facing_x, facing_y);
-                    Debug.Log("Player destroyed projectile directly");
-                    hit.Destroy();
-                    moved = true;
-                }
+
+
             }
         }
         if (forward_move != 0 | lateral_move != 0)
@@ -413,6 +387,56 @@ public class GameController : MonoBehaviour
                 TileMap.TileArray[new_x_pos, new_y_pos].SetVisible();
             }
         }
+    }
+
+    private bool PlayerFire()
+    {
+        bool moved = false;
+        int facing_x = PlayerXPos;
+        int facing_y = PlayerYPos;
+        switch (direction)
+        {
+            case Direction.NORTH:
+                facing_y++;
+                break;
+            case Direction.EAST:
+                facing_x++;
+                break;
+            case Direction.SOUTH:
+                facing_y--;
+                break;
+            case Direction.WEST:
+                facing_x--;
+                break;
+        }
+        {
+            if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.EMPTY_TILE)
+            {
+                var projectile = new Projectile(PlayerXPos, PlayerYPos, this, TileMap, direction, null);
+                moved = true;
+            }
+            else if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.DUMB_BOT |
+                     TileMap.TileArray[facing_x, facing_y].Contents == TileContents.SENTINEL_BOT_EW |
+                     TileMap.TileArray[facing_x, facing_y].Contents == TileContents.SENTINEL_BOT_NS)
+            {
+                Enemy hit = GetEnemyAtTile(facing_x, facing_y);
+                Debug.Log("Player hit " + hit.Name + " directly");
+                hit.Die();
+                moved = true;
+            }
+            else if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_N |
+                     TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_E |
+                     TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_S |
+                     TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_W)
+            {
+                Projectile hit = GetProjectileAtTile(facing_x, facing_y);
+                Debug.Log("Player destroyed projectile directly");
+                hit.Destroy();
+                moved = true;
+            }
+        }
+
+        return moved;
     }
 
     private void DoEnemyMovement()
