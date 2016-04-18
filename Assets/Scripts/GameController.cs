@@ -33,7 +33,9 @@ public enum GameState
     MOVEMENT,
     SELECTION,
     WAIT,
-    NOTIFICATION
+    NOTIFICATION,
+    LEVEL_WON,
+    LOST
 }
 #endregion
 
@@ -78,7 +80,7 @@ public class GameController : MonoBehaviour
     public SpriteRenderer ToolSprite;
 
     public List<Enemy> Enemies = new List<Enemy>();
-
+    public List<Projectile> Projectiles = new List<Projectile>();
     #endregion
 
     #region Private Attributes
@@ -135,7 +137,6 @@ public class GameController : MonoBehaviour
         {
             case GameState.MOVEMENT:
                 DoMovement();
-                DoEnemyMovement();
                 UpdateMap();
                 break;
             case GameState.SELECTION:
@@ -145,6 +146,23 @@ public class GameController : MonoBehaviour
 
         UpdateUI();
 
+    }
+    #endregion
+
+    #region Public Methods
+    public void Hit(Projectile projectile)
+    {
+        if (projectile.Origin != null)
+        {
+            Debug.Log("Hit by projectile from " + projectile.Origin.Name);
+            SetState(GameState.LOST);
+        }
+    }
+
+    public void Hit(Enemy enemy)
+    {
+        Debug.Log("Hit directly by " + enemy.Name);
+        SetState(GameState.LOST);
     }
     #endregion
 
@@ -236,6 +254,10 @@ public class GameController : MonoBehaviour
 
     private void DoMovement()
     {
+        if (TileMap.TileArray[PlayerXPos, PlayerYPos].Contents == TileContents.EXIT_STAIRS)
+        {
+            SetState(GameState.LEVEL_WON);
+        }
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             SetState(GameState.SELECTION);
@@ -316,6 +338,7 @@ public class GameController : MonoBehaviour
                 PlayerYPos = new_y_pos;
                 TileMap.TileArray[PlayerXPos, PlayerYPos].SetInvisible();
                 playerTicks++;
+                DoEnemyMovement();
             }
             else
             {
@@ -326,20 +349,23 @@ public class GameController : MonoBehaviour
 
     private void DoEnemyMovement()
     {
+        Projectiles.ForEach(projectile => projectile.Move());
         if (playerTicks >= chassis.MaxTicks)
         {
             playerTicks = 0;
-            Debug.Log(chassis.MaxTicks);
-            Debug.Log("Doing enemy movement");
             Enemies.ForEach(enemy => enemy.Move());
         }
     }
+
     private void DoSelection()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             if (activeCount <= maxCount)
+            {
                 SetState(GameState.MOVEMENT);
+                playerTicks++;
+            }
         }
         if (Input.GetKeyDown(KeyCode.DownArrow) | Input.GetKeyDown(KeyCode.S))
         {
@@ -505,6 +531,12 @@ public class GameController : MonoBehaviour
                 Debug.Log("Entering selection state");
                 pointerPosition = (int)sensorState;
                 PointerText.gameObject.SetActive(true);
+                break;
+            case GameState.LEVEL_WON:
+                Debug.LogError("You won!");
+                break;
+            case GameState.LOST:
+                Debug.LogError("You lost!");
                 break;
         }
         gameState = state;

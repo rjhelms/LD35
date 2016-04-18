@@ -6,6 +6,10 @@
     DUMB_BOT,
     SENTINEL_BOT_EW,
     SENTINEL_BOT_NS,
+    LASER_N,
+    LASER_E,
+    LASER_S,
+    LASER_W,
 }
 
 public class Tile
@@ -19,6 +23,7 @@ public class Tile
         Contents = contents;
         KnownContents = TileContents.EMPTY_TILE;
     }
+
     public void SetVisible()
     {
         KnownContents = Contents;

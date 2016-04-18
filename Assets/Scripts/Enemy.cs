@@ -36,12 +36,41 @@ public class Enemy
         controller.Enemies.Remove(this);
     }
 
+    protected void fire()
+    {
+        int facing_x = PositionX;
+        int facing_y = PositionY;
+        switch (direction)
+        {
+            case Direction.NORTH:
+                facing_y++;
+                break;
+            case Direction.EAST:
+                facing_x++;
+                break;
+            case Direction.SOUTH:
+                facing_y--;
+                break;
+            case Direction.WEST:
+                facing_x--;
+                break;
+        }
+        if (controller.PlayerXPos == facing_x & controller.PlayerYPos == facing_y)
+        {
+            controller.Hit(this);
+        } else
+        {
+            new Projectile(facing_x, facing_y, controller, tileMap, direction, this);
+        }
+    }
+
 }
 
 public class DumbBot : Enemy
 {
     private float turnChance = 0.25f;
     private float walkChance = 0.75f;
+    private float fireChance = 0.80f;
     public DumbBot(int x_pos, int y_pos, TileMap map, GameController player) : base(x_pos, y_pos, map, player)
     {
         map.TileArray[PositionX, PositionY].Contents = TileContents.DUMB_BOT;
@@ -51,12 +80,10 @@ public class DumbBot : Enemy
 
     public override void Move()
     {
-        Debug.Log(Name + " move");
         float roll = Random.value;
         if (roll < turnChance)
         {
             float turnDir = 0.5f - Random.value;
-            Debug.Log(Name + " turning");
             if (turnDir < 0)
             {
                 direction--;
@@ -78,7 +105,6 @@ public class DumbBot : Enemy
         {
             int new_x = PositionX;
             int new_y = PositionY;
-            Debug.Log(Name + " walking");
             switch (direction)
             {
                 case Direction.NORTH:
@@ -104,10 +130,11 @@ public class DumbBot : Enemy
                 old_tile.Contents = TileContents.EMPTY_TILE;
                 new_tile.Contents = TileContents.DUMB_BOT;
             }
-            else
-            {
-                Debug.Log(Name + " hit wall");
-            }
+
+        }
+        else if (roll < fireChance)
+        {
+            fire();
         }
 
     }
@@ -121,7 +148,8 @@ public class Sentinel : Enemy
         if (dir == Direction.EAST | dir == Direction.WEST)
         {
             map.TileArray[PositionX, PositionY].Contents = TileContents.SENTINEL_BOT_EW;
-        } else
+        }
+        else
         {
             map.TileArray[PositionX, PositionY].Contents = TileContents.SENTINEL_BOT_NS;
         }
@@ -131,45 +159,68 @@ public class Sentinel : Enemy
 
     public override void Move()
     {
-        Debug.Log(Name + " move");
+        int facing_x = 0;
+        int facing_y = 0;
+        switch (direction)
+        {
+            case Direction.NORTH:
+                facing_y++;
+                break;
+            case Direction.EAST:
+                facing_x++;
+                break;
+            case Direction.SOUTH:
+                facing_y--;
+                break;
+            case Direction.WEST:
+                facing_x--;
+                break;
+        }
+        bool to_fire = false;
+        int check_tile_x = PositionX;
+        int check_tile_y = PositionY;
+        for (int i = 0; i < 4; i++)
+        {
+            check_tile_x += facing_x;
+            check_tile_y += facing_y;
+            i++;
+            if (controller.PlayerXPos == check_tile_x & controller.PlayerYPos == check_tile_y)
+            {
+                to_fire = true;
+            }
+            else if (tileMap.TileArray[check_tile_x, check_tile_y].Contents != TileContents.EMPTY_TILE)
+            {
+                break;
+            }
+        }
+        if (to_fire)
+        {
+            fire();
+            return;
+        }
         if (turnState > 0)
         {
-            Debug.Log(Name + " turn right");
             direction++;
             if (direction > Direction.WEST)
             {
                 direction = Direction.NORTH;
             }
             turnState--;
-        } else if (turnState < 0)
+        }
+        else if (turnState < 0)
         {
-            Debug.Log(Name + " turn left");
             direction--;
             if (direction < Direction.NORTH)
             {
                 direction = Direction.WEST;
             }
             turnState++;
-        } else
+        }
+        else
         {
-            int new_x = PositionX;
-            int new_y = PositionY;
-            Debug.Log(Name + " walking");
-            switch (direction)
-            {
-                case Direction.NORTH:
-                    new_y++;
-                    break;
-                case Direction.EAST:
-                    new_x++;
-                    break;
-                case Direction.SOUTH:
-                    new_y--;
-                    break;
-                case Direction.WEST:
-                    new_x--;
-                    break;
-            }
+            int new_x = PositionX + facing_x;
+            int new_y = PositionY + facing_y;
+
             Tile old_tile = tileMap.TileArray[PositionX, PositionY];
             Tile new_tile = tileMap.TileArray[new_x, new_y];
             if (new_tile.Contents == TileContents.EMPTY_TILE &
@@ -189,15 +240,13 @@ public class Sentinel : Enemy
             }
             else
             {
-                Debug.Log(Name + " hit wall");
                 float turn_roll = Random.value;
                 if (turn_roll < 0.5f)
                 {
-                    Debug.Log(Name + " turn around left");
                     turnState = -2;
-                } else
+                }
+                else
                 {
-                    Debug.Log(Name + " turn around right");
                     turnState = 2;
                 }
             }

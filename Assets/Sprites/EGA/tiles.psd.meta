@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a910a4d02bf1cb24ab2731138357b148
-timeCreated: 1460951070
+timeCreated: 1460957199
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -14,6 +14,14 @@ TextureImporter:
     21300014: tiles_7
     21300016: tiles_8
     21300018: tiles_9
+    21300020: tiles_10
+    21300022: tiles_11
+    21300024: tiles_12
+    21300026: tiles_13
+    21300028: tiles_14
+    21300030: tiles_15
+    21300032: tiles_16
+    21300034: tiles_17
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -164,6 +172,94 @@ TextureImporter:
         serializedVersion: 2
         x: 288
         y: 375
+        width: 32
+        height: 25
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: tiles_10
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 375
+        width: 32
+        height: 25
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: tiles_11
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 375
+        width: 32
+        height: 25
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: tiles_12
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 375
+        width: 32
+        height: 25
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: tiles_13
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 375
+        width: 32
+        height: 25
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: tiles_14
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 375
+        width: 32
+        height: 25
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: tiles_15
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 375
+        width: 32
+        height: 25
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: tiles_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 350
+        width: 32
+        height: 25
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: tiles_17
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 350
         width: 32
         height: 25
       alignment: 6
