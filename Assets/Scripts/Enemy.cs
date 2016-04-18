@@ -10,6 +10,8 @@ public class Enemy
     protected TileMap tileMap;
     protected GameController controller;
     protected string name;
+    protected int damage;
+    protected int hitPoints;
 
     public virtual string Name
     {
@@ -24,14 +26,29 @@ public class Enemy
         controller = player;
         controller.Enemies.Add(this);
         name = "Enemy";
+        damage = 10;
+        hitPoints = 10;
     }
 
     public virtual void Move()
     {
     }
 
-    public void Die()
+    public void Hit(int damage)
     {
+        hitPoints -= damage;
+        if (hitPoints <= 0)
+        {
+            die();
+        } else
+        {
+            Debug.LogFormat("{0} has {1} hit points", name, hitPoints);
+        }
+    }
+
+    protected void die()
+    {
+        Debug.LogFormat("{0} is killed!", name, hitPoints);
         tileMap.TileArray[PositionX, PositionY].Contents = TileContents.EMPTY_TILE;
         controller.Enemies.Remove(this);
     }
@@ -57,10 +74,13 @@ public class Enemy
         }
         if (controller.PlayerXPos == facing_x & controller.PlayerYPos == facing_y)
         {
-            controller.Hit(this);
+            controller.Hit(this, damage);
+        } else if (tileMap.TileArray[facing_x, facing_y].Contents == TileContents.EMPTY_TILE)
+        {
+            new Projectile(facing_x, facing_y, controller, tileMap, direction, this, damage);
         } else
         {
-            new Projectile(facing_x, facing_y, controller, tileMap, direction, this);
+            Debug.LogFormat("{0} fire at ({1}, {2}) blocked by level", name, facing_x, facing_y);
         }
     }
 
@@ -68,6 +88,7 @@ public class Enemy
 
 public class DumbBot : Enemy
 {
+    // these chances are top ends of ranges
     private float turnChance = 0.25f;
     private float walkChance = 0.75f;
     private float fireChance = 0.80f;
@@ -76,6 +97,8 @@ public class DumbBot : Enemy
         map.TileArray[PositionX, PositionY].Contents = TileContents.DUMB_BOT;
         direction = (Direction)Random.Range(0, 4);
         name = "Drone";
+        damage = 5;
+        hitPoints = 10;
     }
 
     public override void Move()
@@ -154,6 +177,8 @@ public class Sentinel : Enemy
             map.TileArray[PositionX, PositionY].Contents = TileContents.SENTINEL_BOT_NS;
         }
         direction = dir;
+        damage = 10;
+        hitPoints = 15;
         name = "Sentinel";
     }
 

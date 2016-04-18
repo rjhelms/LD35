@@ -84,6 +84,7 @@ public class GameController : MonoBehaviour
     public List<Projectile> Projectiles = new List<Projectile>();
 
     public int MaxHitPoints = 100;
+    public int PlayerLaserDamage = 10;
     #endregion
 
     #region Private Attributes
@@ -121,8 +122,8 @@ public class GameController : MonoBehaviour
     void Start()
     {
         spriteDefinitions = FindObjectOfType<SpriteDefinitions>();
-        InitializePlayer();
-        InitializeUI();
+        initializePlayer();
+        initializeUI();
     }
 
     // Update is called once per frame
@@ -139,33 +140,33 @@ public class GameController : MonoBehaviour
         switch (gameState)
         {
             case GameState.MOVEMENT:
-                DoMovement();
-                UpdateMap();
+                doMovement();
+                updateMap();
                 break;
             case GameState.SELECTION:
-                DoSelection();
+                doSelection();
                 break;
         }
 
-        UpdateUI();
+        updateUI();
 
     }
     #endregion
 
     #region Public Methods
-    public void Hit(Projectile projectile)
+    public void Hit(Projectile projectile, int damage)
     {
         if (projectile.Origin != null)
         {
             Debug.Log("Hit by projectile from " + projectile.Origin.Name);
-            TakeDamage(10);
+            takeDamage(damage);
         }
     }
 
-    public void Hit(Enemy enemy)
+    public void Hit(Enemy enemy, int damage)
     {
         Debug.Log("Hit directly by " + enemy.Name);
-        TakeDamage(10);
+        takeDamage(damage);
     }
 
     public Enemy GetEnemyAtTile(int tile_x, int tile_y)
@@ -195,15 +196,15 @@ public class GameController : MonoBehaviour
 
     #region Private Methods
 
-    private void TakeDamage(int damage)
+    private void takeDamage(int damage)
     {
         currentHitPoints -= damage;
         if (currentHitPoints < 0)
             currentHitPoints = 0;
         if (currentHitPoints == 0)
-            SetState(GameState.LOST);
+            setState(GameState.LOST);
     }
-    private void UpdateMap()
+    private void updateMap()
     {
         sensor.Scan(PlayerXPos, PlayerYPos, this.direction);
         for (int x = 0; x < 7; x++)
@@ -227,7 +228,7 @@ public class GameController : MonoBehaviour
 
     }
 
-    private void UpdateUI()
+    private void updateUI()
     {
         foreach (Text text in SensorText)
         {
@@ -289,15 +290,15 @@ public class GameController : MonoBehaviour
         BatteryText.text = string.Format("BATTERY: {0,3}%", currentHitPoints);
     }
 
-    private void DoMovement()
+    private void doMovement()
     {
         if (TileMap.TileArray[PlayerXPos, PlayerYPos].Contents == TileContents.EXIT_STAIRS)
         {
-            SetState(GameState.LEVEL_WON);
+            setState(GameState.LEVEL_WON);
         }
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            SetState(GameState.SELECTION);
+            setState(GameState.SELECTION);
             return;
         }
         bool moved = false;
@@ -349,7 +350,7 @@ public class GameController : MonoBehaviour
                 case ToolState.NONE:
                     break;
                 case ToolState.LASER:
-                    if (PlayerFire())
+                    if (playerFire())
                         moved = true;
                     break;
                 case ToolState.ACTUATOR:
@@ -393,7 +394,7 @@ public class GameController : MonoBehaviour
                 PlayerYPos = new_y_pos;
                 TileMap.TileArray[PlayerXPos, PlayerYPos].SetInvisible();
                 playerTicks++;
-                DoEnemyMovement();
+                doEnemyMovement();
             }
             else
             {
@@ -402,7 +403,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private bool PlayerFire()
+    private bool playerFire()
     {
         bool moved = false;
         int facing_x = PlayerXPos;
@@ -425,7 +426,7 @@ public class GameController : MonoBehaviour
         {
             if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.EMPTY_TILE)
             {
-                var projectile = new Projectile(PlayerXPos, PlayerYPos, this, TileMap, direction, null);
+                new Projectile(PlayerXPos, PlayerYPos, this, TileMap, direction, null, PlayerLaserDamage);
                 moved = true;
             }
             else if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.DUMB_BOT |
@@ -434,7 +435,7 @@ public class GameController : MonoBehaviour
             {
                 Enemy hit = GetEnemyAtTile(facing_x, facing_y);
                 Debug.Log("Player hit " + hit.Name + " directly");
-                hit.Die();
+                hit.Hit(PlayerLaserDamage);
                 moved = true;
             }
             else if (TileMap.TileArray[facing_x, facing_y].Contents == TileContents.LASER_N |
@@ -452,7 +453,7 @@ public class GameController : MonoBehaviour
         return moved;
     }
 
-    private void DoEnemyMovement()
+    private void doEnemyMovement()
     {
         Projectiles.ForEach(item => item.Move());
         if (playerTicks >= chassis.MaxTicks)
@@ -462,13 +463,13 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void DoSelection()
+    private void doSelection()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             if (activeCount <= maxCount)
             {
-                SetState(GameState.MOVEMENT);
+                setState(GameState.MOVEMENT);
                 playerTicks++;
             }
         }
@@ -494,40 +495,40 @@ public class GameController : MonoBehaviour
             switch (pointerPosition)
             {
                 case 0:
-                    SetSensor(SensorState.BASIC);
+                    setSensor(SensorState.BASIC);
                     break;
                 case 1:
-                    SetSensor(SensorState.OMNI);
+                    setSensor(SensorState.OMNI);
                     break;
                 case 2:
-                    SetSensor(SensorState.INFRARED);
+                    setSensor(SensorState.INFRARED);
                     break;
                 case 3:
-                    SetSensor(SensorState.LONGRANGE);
+                    setSensor(SensorState.LONGRANGE);
                     break;
                 case 4:
-                    SetChassis(ChassisState.BASIC);
+                    setChassis(ChassisState.BASIC);
                     break;
                 case 5:
-                    SetChassis(ChassisState.SILENT);
+                    setChassis(ChassisState.SILENT);
                     break;
                 case 6:
-                    SetChassis(ChassisState.FAST);
+                    setChassis(ChassisState.FAST);
                     break;
                 case 7:
-                    SetChassis(ChassisState.OFFROAD);
+                    setChassis(ChassisState.OFFROAD);
                     break;
                 case 8:
-                    SetTool(ToolState.NONE);
+                    setTool(ToolState.NONE);
                     break;
                 case 9:
-                    SetTool(ToolState.LASER);
+                    setTool(ToolState.LASER);
                     break;
                 case 10:
-                    SetTool(ToolState.ACTUATOR);
+                    setTool(ToolState.ACTUATOR);
                     break;
                 case 11:
-                    SetTool(ToolState.PROBE);
+                    setTool(ToolState.PROBE);
                     break;
             }
 
@@ -541,12 +542,12 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void InitializePlayer()
+    private void initializePlayer()
     {
         direction = Direction.NORTH;
-        SetSensor(SensorState.BASIC);
-        SetChassis(ChassisState.BASIC);
-        SetTool(ToolState.NONE);
+        setSensor(SensorState.BASIC);
+        setChassis(ChassisState.BASIC);
+        setTool(ToolState.NONE);
         gameState = GameState.MOVEMENT;
         playerTicks = 0;
         currentHitPoints = MaxHitPoints;
@@ -559,7 +560,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void InitializeUI()
+    private void initializeUI()
     {
         VisibleSprites = new SpriteRenderer[7, 7];
         for (int x = 0; x < 7; x++)
@@ -595,13 +596,13 @@ public class GameController : MonoBehaviour
         PointerText.color = InactiveColour;
     }
 
-    private void SetChassis(ChassisState state)
+    private void setChassis(ChassisState state)
     {
         chassisState = state;
         chassis = new Chassis(state);
     }
 
-    private void SetSensor(SensorState state)
+    private void setSensor(SensorState state)
     {
         sensorState = state;
         switch (state)
@@ -625,7 +626,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void SetState(GameState state)
+    private void setState(GameState state)
     {
         switch (state)
         {
@@ -648,7 +649,7 @@ public class GameController : MonoBehaviour
         gameState = state;
     }
 
-    private void SetTool(ToolState state)
+    private void setTool(ToolState state)
     {
         toolState = state;
     }

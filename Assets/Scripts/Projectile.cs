@@ -9,11 +9,23 @@ public class Projectile
     private GameController controller;
     private TileMap tileMap;
     private Direction direction;
-
+    private int damage;
     private TileContents tileContent;
     private int coolDown;
 
-    public Projectile(int positionX, int positionY, GameController controller, TileMap tileMap, Direction direction, Enemy origin)
+    //public Projectile(int positionX, int positionY, GameController controller, TileMap tileMap, Direction direction, Enemy origin)
+    //{
+    //    damage = 10;
+    //    Initialize(positionX, positionY, controller, tileMap, direction, origin);
+    //}
+
+    public Projectile(int positionX, int positionY, GameController controller, TileMap tileMap, Direction direction, Enemy origin, int damage)
+    {
+        this.damage = damage;
+        Initialize(positionX, positionY, controller, tileMap, direction, origin);
+    }
+
+    private void Initialize(int positionX, int positionY, GameController controller, TileMap tileMap, Direction direction, Enemy origin)
     {
         PositionX = positionX;
         PositionY = positionY;
@@ -40,7 +52,6 @@ public class Projectile
         tileMap.TileArray[positionX, positionY].Contents = tileContent;
         controller.Projectiles.Add(this);
     }
-
     public void Destroy()
     {
         tileMap.TileArray[PositionX, PositionY].Contents = TileContents.EMPTY_TILE;
@@ -80,7 +91,7 @@ public class Projectile
                 Destroy();
                 if (Origin != null) // no friendly fire
                 {
-                    controller.Hit(this);
+                    controller.Hit(this, damage);
                 }
             }
             else if (next_tile.Contents == TileContents.EMPTY_TILE)
@@ -113,14 +124,14 @@ public class Projectile
                      next_tile.Contents == TileContents.SENTINEL_BOT_NS)
             {
                 Enemy hit = controller.GetEnemyAtTile(facing_x, facing_y);
-                hit.Die();
+                hit.Hit(damage);
                 if (Origin != null)
                 {
-                    Debug.LogFormat("{0} destroyed by projectile from {1}", hit.Name, Origin.Name);
+                    Debug.LogFormat("{0} hit by projectile from {1}", hit.Name, Origin.Name);
                 }
                 else
                 {
-                    Debug.LogFormat("{0} destroyed by projectile from player", hit.Name);
+                    Debug.LogFormat("{0} hit by projectile from player", hit.Name);
                 }
                 Destroy();
             }

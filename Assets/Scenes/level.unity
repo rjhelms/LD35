@@ -2138,6 +2138,7 @@ MonoBehaviour:
   BodySprite: {fileID: 91779061}
   ToolSprite: {fileID: 172526951}
   MaxHitPoints: 100
+  PlayerLaserDamage: 10
 --- !u!4 &1554982844
 Transform:
   m_ObjectHideFlags: 0
