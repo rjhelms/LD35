@@ -10,6 +10,10 @@
     LASER_E,
     LASER_S,
     LASER_W,
+    POWERUP_BATTERY,
+    POWERUP_HEAD_OMNI,
+    POWERUP_HEAD_IR,
+    POWERUP_HEAD_LONGRANGE,
 }
 
 public class Tile
@@ -53,6 +57,14 @@ public class Tile
                 return true;
             case TileContents.LASER_W:
                 return true;
+            case TileContents.POWERUP_BATTERY:
+                return true;
+            case TileContents.POWERUP_HEAD_OMNI:
+                return true;
+            case TileContents.POWERUP_HEAD_IR:
+                return true;
+            case TileContents.POWERUP_HEAD_LONGRANGE:
+                return true;
             default:
                 return false;
         }
@@ -75,6 +87,14 @@ public class Tile
             case TileContents.LASER_S:
                 return true;
             case TileContents.LASER_W:
+                return true;
+            case TileContents.POWERUP_BATTERY:
+                return true;
+            case TileContents.POWERUP_HEAD_OMNI:
+                return true;
+            case TileContents.POWERUP_HEAD_IR:
+                return true;
+            case TileContents.POWERUP_HEAD_LONGRANGE:
                 return true;
             default:
                 return false;
