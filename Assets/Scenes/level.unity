@@ -2134,6 +2134,7 @@ MonoBehaviour:
   BatteryText: {fileID: 1220014110}
   MessageText: {fileID: 539576790}
   NotificationText: {fileID: 1348511554}
+  LevelText: {fileID: 1318271327}
   NotificationCanvas: {fileID: 1356499312}
   PrefabTileSprite: {fileID: 102722, guid: a2471701772e29340bf396e07b4373d7, type: 2}
   VisibleSpritesParent: {fileID: 724078933}

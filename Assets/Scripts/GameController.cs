@@ -114,6 +114,7 @@ public class GameController : MonoBehaviour
     private int pointerPosition;
     private int lastPlayerTick;
     private int globalTick = 0;
+    private float notificationEndTime;
     #endregion
 
     #region Internal Properites
@@ -171,12 +172,13 @@ public class GameController : MonoBehaviour
 
     private void doNotification()
     {
-        if (Input.anyKeyDown)
-        {
-            NotificationCanvas.gameObject.SetActive(false);
-            setState(GameState.MOVEMENT);
-            updateMap();
-        }
+        if (Time.time < notificationEndTime)
+            return;
+
+        NotificationCanvas.gameObject.SetActive(false);
+        setState(GameState.MOVEMENT);
+        updateMap();
+
     }
     #endregion
 
@@ -451,7 +453,8 @@ public class GameController : MonoBehaviour
                     Debug.Log("Got a battery!");
                     ScoreManager.Instance.HitPoints += BatteryHitPoints;
                     tile.Contents = TileContents.EMPTY_TILE;
-                } else
+                }
+                else
                 {
                     Debug.Log("Found a battery, but already fully charged.");
                 }
@@ -462,7 +465,7 @@ public class GameController : MonoBehaviour
                     Debug.Log("Got the omni head!");
                     ScoreManager.Instance.SensorsAvailable[(int)SensorState.OMNI] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
-                    Notify("FOUND THE OMNI SENSOR\r\n\r\n\r\nTHIS SENSOR CAN SEE \r\nIN ALL DIRECTIONS \r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                    Notify("FOUND THE OMNI SENSOR\r\n\r\n\r\nTHIS SENSOR CAN SEE \r\nIN ALL DIRECTIONS \r\n\r\n\r\n\r\n");
                 }
                 break;
             case TileContents.POWERUP_HEAD_IR:
@@ -471,7 +474,7 @@ public class GameController : MonoBehaviour
                     Debug.Log("Got the IR head!");
                     ScoreManager.Instance.SensorsAvailable[(int)SensorState.INFRARED] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
-                    Notify("FOUND THE INFRARED SENSOR\r\n\r\n\r\nTHIS SENSOR CAN SEE \r\nTHROUGH WALLS\r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                    Notify("FOUND THE INFRARED SENSOR\r\n\r\n\r\nTHIS SENSOR CAN SEE \r\nTHROUGH WALLS\r\n\r\n\r\n\r\n");
                 }
                 break;
             case TileContents.POWERUP_HEAD_LONGRANGE:
@@ -480,7 +483,7 @@ public class GameController : MonoBehaviour
                     Debug.Log("Got the long range head!");
                     ScoreManager.Instance.SensorsAvailable[(int)SensorState.LONGRANGE] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
-                    Notify("FOUND THE LONG RANGE \r\nSENSOR\r\n\r\nTHIS SENSOR CAN SEE \r\nONE TILE FARTHER\r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                    Notify("FOUND THE LONG RANGE \r\nSENSOR\r\n\r\nTHIS SENSOR CAN SEE \r\nONE TILE FARTHER\r\n\r\n\r\n\r\n");
                 }
                 break;
             case TileContents.POWERUP_CHASSIS_SILENT:
@@ -489,7 +492,7 @@ public class GameController : MonoBehaviour
                     Debug.Log("Got the silent chassis!");
                     ScoreManager.Instance.ChassisAvailable[(int)ChassisState.SILENT] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
-                    Notify("FOUND THE SILENT CHASSIS\r\n\r\n\r\nENEMIES WILL NOT HEAR YOU \r\nMOVING WITH THIS EQUIPPED \r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                    Notify("FOUND THE SILENT CHASSIS\r\n\r\n\r\nENEMIES WILL NOT HEAR YOU \r\nMOVING WITH THIS EQUIPPED \r\n\r\n\r\n");
                 }
                 break;
             case TileContents.POWERUP_CHASSIS_FAST:
@@ -498,7 +501,7 @@ public class GameController : MonoBehaviour
                     Debug.Log("Got the fast chassis!");
                     ScoreManager.Instance.ChassisAvailable[(int)ChassisState.FAST] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
-                    Notify("FOUND THE FAST CHASSIS\r\n\r\n\r\nYOU WILL MOVE MUCH FASTER \r\nTHAN YOUR ENEMIES WITH\r\nTHIS EQUIPPED \r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                    Notify("FOUND THE FAST CHASSIS\r\n\r\n\r\nYOU WILL MOVE MUCH FASTER \r\nTHAN YOUR ENEMIES WITH\r\nTHIS EQUIPPED \r\n\r\n");
                 }
                 break;
             case TileContents.POWERUP_CHASSIS_OFFROAD:
@@ -507,7 +510,7 @@ public class GameController : MonoBehaviour
                     Debug.Log("Got the offroad chassis!");
                     ScoreManager.Instance.ChassisAvailable[(int)ChassisState.OFFROAD] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
-                    Notify("FOUND THE OFF-ROAD CHASSIS\r\n\r\n\r\nYOU CAN RUN OVER SMALL\r\nOBSTACLES WITH THIS\r\nEQUIPPED\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                    Notify("FOUND THE OFF-ROAD CHASSIS\r\n\r\n\r\nYOU CAN RUN OVER SMALL\r\nOBSTACLES WITH THIS\r\nEQUIPPED\r\n\r\n");
                 }
                 break;
             case TileContents.POWERUP_TOOL_LASER:
@@ -516,7 +519,7 @@ public class GameController : MonoBehaviour
                     Debug.Log("Got the laser!");
                     ScoreManager.Instance.ToolsAvailable[(int)ToolState.LASER] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
-                    Notify("FOUND THE LASER \r\n\r\n\r\nYOU CAN BLAST YOUR ENEMIES\r\nTO BITS WITH THIS \r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                    Notify("FOUND THE LASER \r\n\r\n\r\nYOU CAN BLAST YOUR ENEMIES\r\nTO BITS WITH THIS \r\n\r\n\r\n");
                 }
                 break;
             case TileContents.POWERUP_TOOL_ACTUATOR:
@@ -525,7 +528,7 @@ public class GameController : MonoBehaviour
                     Debug.Log("Got the actuator!");
                     ScoreManager.Instance.ToolsAvailable[(int)ToolState.ACTUATOR] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
-                    Notify("FOUND THE ACTUATOR\r\n\r\n\r\nYOU CAN OPEN DOORS AND USE\r\nSWITCHES WITH THIS\r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                    Notify("FOUND THE ACTUATOR\r\n\r\n\r\nYOU CAN OPEN DOORS AND USE\r\nSWITCHES WITH THIS\r\n\r\n\r\n\r\n");
                 }
                 break;
             case TileContents.POWERUP_TOOL_PROBE:
@@ -534,7 +537,7 @@ public class GameController : MonoBehaviour
                     Debug.Log("Got the probe!");
                     ScoreManager.Instance.ToolsAvailable[(int)ToolState.PROBE] = true;
                     tile.Contents = TileContents.EMPTY_TILE;
-                    Notify("FOUND THE PROBE \r\n\r\n\r\nYOU CAN DISABLE COMPUTER\r\nTERMINALS WITH THIS \r\n\r\n\r\n\r\nPRESS ANY KEY TO CONTINUE ");
+                    Notify("FOUND THE PROBE \r\n\r\n\r\nYOU CAN DISABLE COMPUTER\r\nTERMINALS WITH THIS \r\n\r\n\r\n\r\n");
                 }
                 break;
         }
@@ -869,6 +872,9 @@ public class GameController : MonoBehaviour
                 break;
             case GameState.LOST:
                 Debug.LogError("You lost!");
+                break;
+            case GameState.NOTIFICATION:
+                notificationEndTime = Time.time + 2f;
                 break;
         }
         gameState = state;
