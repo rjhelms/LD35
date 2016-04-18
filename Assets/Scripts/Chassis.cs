@@ -16,12 +16,12 @@
         switch (state)
         {
             case ChassisState.BASIC:
-                MaxTicks = 1;
+                MaxTicks = 2;
                 Silent = false;
                 Destructive = false;
                 break;
             case ChassisState.SILENT:
-                MaxTicks = 1;
+                MaxTicks = 2;
                 Silent = true;
                 Destructive = false;
                 break;
@@ -31,7 +31,7 @@
                 Destructive = false;
                 break;
             case ChassisState.OFFROAD:
-                MaxTicks = 1;
+                MaxTicks = 2;
                 Silent = false;
                 Destructive = true;
                 break;
