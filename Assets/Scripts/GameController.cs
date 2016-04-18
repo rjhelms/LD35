@@ -98,6 +98,10 @@ public class GameController : MonoBehaviour
     public string TooManyString = "TOO MANY PARTS SELECTED";
     public List<string> MessageList;
     public float messageScrollTime = 0.8f;
+
+    public bool[] startSensorsAvailable;
+    public bool[] startChassisAvailable;
+    public bool[] startToolsAvailable;
     #endregion
 
     #region Private Attributes
@@ -124,9 +128,7 @@ public class GameController : MonoBehaviour
     private SensorState startSensorState;
     private ChassisState startChassisState;
     private ToolState startToolState;
-    private bool[] startSensorsAvailable;
-    private bool[] startChassisAvailable;
-    private bool[] startToolsAvailable;
+
     private float nextMessageTime;
     private int messagePointer;
     #endregion
@@ -621,6 +623,27 @@ public class GameController : MonoBehaviour
                     MessageList.Add("FOUND THE PROBE");
                 }
                 break;
+            case TileContents.POWERUP_CPU:
+                if (ScoreManager.Instance.MaxPartCount == 1)
+                {
+                    tile.Contents = TileContents.EMPTY_TILE;
+                    Notify("FOUND A CPU UPGRADE\r\n\r\n\r\nCPU UPGRADES ALLOW YOU TO \r\nHAVE MORE PARTS ACTIVE\r\nAT A TIME \r\n\r\n\r\n");
+                    ScoreManager.Instance.MaxPartCount++;
+                    tile.Contents = TileContents.EMPTY_TILE;
+                    MessageList.Add("FOUND A CPU UPGRADE");
+                }
+                else if (ScoreManager.Instance.MaxPartCount < 3)
+                {
+                    ScoreManager.Instance.MaxPartCount++;
+                    tile.Contents = TileContents.EMPTY_TILE;
+                    MessageList.Add("FOUND A CPU UPGRADE");
+                }
+                else
+                {
+                    MessageList.Add("NO ROOM FOR MORE CPU UPGRADES");
+                }
+                break;
+
         }
         updateMap();
     }
@@ -978,9 +1001,12 @@ public class GameController : MonoBehaviour
         startSensorsAvailable = new bool[4];
         startChassisAvailable = new bool[4];
         startToolsAvailable = new bool[4];
-        ScoreManager.Instance.SensorsAvailable.CopyTo(startSensorsAvailable, 0);
-        ScoreManager.Instance.ChassisAvailable.CopyTo(startChassisAvailable, 0);
-        ScoreManager.Instance.ChassisAvailable.CopyTo(startToolsAvailable, 0);
+        for (int i = 0; i < 4; i++)
+        {
+            startSensorsAvailable[i] = ScoreManager.Instance.SensorsAvailable[i];
+            startChassisAvailable[i] = ScoreManager.Instance.ChassisAvailable[i];
+            startToolsAvailable[i] = ScoreManager.Instance.ToolsAvailable[i];
+        }
 
         gameState = GameState.MOVEMENT;
         playerTick = 0;
@@ -1099,7 +1125,7 @@ public class GameController : MonoBehaviour
                 ScoreManager.Instance.SensorsAvailable = startSensorsAvailable;
                 ScoreManager.Instance.ChassisAvailable = startChassisAvailable;
                 ScoreManager.Instance.ToolsAvailable = startToolsAvailable;
-                SceneManager.LoadScene("level");
+                SceneManager.LoadScene("losescreen");
                 break;
             case GameState.NOTIFICATION:
                 notificationEndTime = Time.time + 2f;
