@@ -89,7 +89,8 @@ public class DumbBot : Enemy
             }
             Tile old_tile = tileMap.TileArray[PositionX, PositionY];
             Tile new_tile = tileMap.TileArray[new_x, new_y];
-            if (new_tile.Contents == TileContents.EMPTY_TILE)
+            if (new_tile.Contents == TileContents.EMPTY_TILE &
+                (controller.PlayerXPos != new_x | controller.PlayerYPos != new_y))
             {
                 PositionX = new_x;
                 PositionY = new_y;
