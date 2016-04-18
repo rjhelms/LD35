@@ -314,6 +314,7 @@ public class GameController : MonoBehaviour
             {
                 PlayerXPos = new_x_pos;
                 PlayerYPos = new_y_pos;
+                TileMap.TileArray[PlayerXPos, PlayerYPos].SetInvisible();
                 playerTicks++;
             }
             else

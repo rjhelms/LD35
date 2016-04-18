@@ -4,6 +4,8 @@
     WALL,
     EXIT_STAIRS,
     DUMB_BOT,
+    SENTINEL_BOT_EW,
+    SENTINEL_BOT_NS,
 }
 
 public class Tile

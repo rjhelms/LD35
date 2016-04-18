@@ -72,6 +72,12 @@ public class LevelLoader : MonoBehaviour
                         case (int)TileContents.DUMB_BOT:
                             new DumbBot(i, yCoordinate, levelTileMap, Controller);
                             break;
+                        case (int)TileContents.SENTINEL_BOT_EW:
+                            new Sentinel(i, yCoordinate, levelTileMap, Controller, Direction.EAST);
+                            break;
+                        case (int)TileContents.SENTINEL_BOT_NS:
+                            new Sentinel(i, yCoordinate, levelTileMap, Controller, Direction.NORTH);
+                            break;
                         default:
                             levelTileMap.TileArray[i, yCoordinate].Contents = (TileContents)int.Parse(line[i]);
                             break;

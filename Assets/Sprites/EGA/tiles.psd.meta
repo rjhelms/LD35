@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a910a4d02bf1cb24ab2731138357b148
-timeCreated: 1460947439
+timeCreated: 1460951070
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -12,6 +12,8 @@ TextureImporter:
     21300010: tiles_5
     21300012: tiles_6
     21300014: tiles_7
+    21300016: tiles_8
+    21300018: tiles_9
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -139,6 +141,28 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 224
+        y: 375
+        width: 32
+        height: 25
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: tiles_8
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 375
+        width: 32
+        height: 25
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: tiles_9
+      rect:
+        serializedVersion: 2
+        x: 288
         y: 375
         width: 32
         height: 25
