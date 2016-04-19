@@ -173,22 +173,22 @@ public class GameController : MonoBehaviour
     void Update()
     {
         // debug controls
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            setState(GameState.LOST);
-        }
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            setState(GameState.LEVEL_WON);
-        }
-        if (Input.GetKeyDown(KeyCode.KeypadPlus))
-        {
-            ScoreManager.Instance.MaxPartCount++;
-        }
-        if (Input.GetKeyDown(KeyCode.KeypadMinus))
-        {
-            ScoreManager.Instance.MaxPartCount--;
-        }
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    setState(GameState.LOST);
+        //}
+        //if (Input.GetKeyDown(KeyCode.N))
+        //{
+        //    setState(GameState.LEVEL_WON);
+        //}
+        //if (Input.GetKeyDown(KeyCode.KeypadPlus))
+        //{
+        //    ScoreManager.Instance.MaxPartCount++;
+        //}
+        //if (Input.GetKeyDown(KeyCode.KeypadMinus))
+        //{
+        //    ScoreManager.Instance.MaxPartCount--;
+        //}
         // end debug controls
         switch (gameState)
         {
