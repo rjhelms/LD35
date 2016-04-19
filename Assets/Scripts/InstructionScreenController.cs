@@ -2,8 +2,7 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class WinScreenController : MonoBehaviour
-{
+public class InstructionScreenController : MonoBehaviour {
 
     public Material RenderMaterial;
     public Camera WorldCamera;
@@ -32,16 +31,10 @@ public class WinScreenController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        } else
-            if (Input.anyKeyDown)
+        if (Input.anyKeyDown)
         {
             ScoreManager.Instance.Reset();
-            AudioSource music = FindObjectOfType<AudioSource>();
-            Destroy(music);
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene("level");
         }
     }
 }

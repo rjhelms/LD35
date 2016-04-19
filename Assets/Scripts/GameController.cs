@@ -376,7 +376,7 @@ public class GameController : MonoBehaviour
         {
             setState(GameState.LEVEL_WON);
         }
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab) | Input.GetKeyDown(KeyCode.KeypadPeriod))
         {
             setState(GameState.SELECTION);
             return;
@@ -386,7 +386,7 @@ public class GameController : MonoBehaviour
         int new_y_pos = PlayerYPos;
         int forward_move = 0;
         int lateral_move = 0;
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q) | Input.GetKeyDown(KeyCode.Keypad7))
         {
             this.direction--;
             if (this.direction < Direction.NORTH)
@@ -397,7 +397,7 @@ public class GameController : MonoBehaviour
             moved = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) | Input.GetKeyDown(KeyCode.Keypad9))
         {
             this.direction++;
             if (this.direction > Direction.WEST)
@@ -408,24 +408,24 @@ public class GameController : MonoBehaviour
             moved = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W) | Input.GetKeyDown(KeyCode.Keypad8))
         {
             forward_move++;
         }
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.S) | Input.GetKeyDown(KeyCode.Keypad2))
         {
             forward_move--;
         }
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.A) | Input.GetKeyDown(KeyCode.Keypad4))
         {
             lateral_move--;
         }
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.D) | Input.GetKeyDown(KeyCode.Keypad6))
         {
             lateral_move++;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.LeftControl) | Input.GetKeyDown(KeyCode.Keypad0))
         {
             switch (ScoreManager.Instance.toolState)
             {
@@ -900,7 +900,7 @@ public class GameController : MonoBehaviour
 
     private void doSelection()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab) | Input.GetKeyDown(KeyCode.KeypadPeriod))
         {
             if (ScoreManager.Instance.ActivePartCount <= ScoreManager.Instance.MaxPartCount)
             {
@@ -909,7 +909,7 @@ public class GameController : MonoBehaviour
                 Tick();
             }
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow) | Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.DownArrow) | Input.GetKeyDown(KeyCode.S) | Input.GetKeyDown(KeyCode.Keypad2))
         {
             PlaySound(Sound.SELECT);
             pointerPosition++;
@@ -941,7 +941,7 @@ public class GameController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.UpArrow) | Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.UpArrow) | Input.GetKeyDown(KeyCode.W) | Input.GetKeyDown(KeyCode.Keypad8))
         {
             PlaySound(Sound.SELECT);
             pointerPosition--;
@@ -973,7 +973,7 @@ public class GameController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return) | Input.GetKeyDown(KeyCode.LeftControl) | Input.GetKeyDown(KeyCode.Keypad0) | Input.GetKeyDown(KeyCode.KeypadEnter))
         {
             PlaySound(Sound.SELECT);
             switch (pointerPosition)

@@ -2,14 +2,13 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class WinScreenController : MonoBehaviour
-{
-
+public class TitleScreenController : MonoBehaviour {
     public Material RenderMaterial;
     public Camera WorldCamera;
 
     public int TargetX = 320;
     public int TargetY = 200;
+    public GameObject Music;
     // Use this for initialization
     void Start()
     {
@@ -27,21 +26,13 @@ public class WinScreenController : MonoBehaviour
             RenderMaterial.mainTextureOffset = new Vector2(0, (1 - pixelRatioAdjustment) / 2);
             WorldCamera.orthographicSize = TargetX / 2;
         }
+        DontDestroyOnLoad(Music);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        } else
-            if (Input.anyKeyDown)
-        {
-            ScoreManager.Instance.Reset();
-            AudioSource music = FindObjectOfType<AudioSource>();
-            Destroy(music);
-            SceneManager.LoadScene(0);
-        }
-    }
+    
+	
+	// Update is called once per frame
+	void Update () {
+        if (Input.anyKeyDown)
+            SceneManager.LoadScene(1);
+	}
 }

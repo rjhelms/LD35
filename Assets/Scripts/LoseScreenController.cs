@@ -46,7 +46,7 @@ public class LoseScreenController : MonoBehaviour {
             pointerText.transform.position = new Vector2(quitText.transform.position.x - 16, pointerText.transform.position.y);
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftControl) | Input.GetKeyDown(KeyCode.KeypadEnter))
+        if (Input.GetKeyDown(KeyCode.LeftControl) | Input.GetKeyDown(KeyCode.KeypadEnter) | Input.GetKeyDown(KeyCode.Keypad0))
         {
             if (Retry)
                 SceneManager.LoadScene("level");
