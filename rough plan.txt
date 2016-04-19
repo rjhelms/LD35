@@ -125,3 +125,18 @@ probe
 
 level 5:
 offroad chassis
+- also have long range head
+- and cpu
+powerups:
+
+OMNI
+IR
+
+SILENT
+FAST
+
+ACTUATOR
+LASER
+PROBE
+
+
