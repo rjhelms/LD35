@@ -31,7 +31,7 @@
                 Destructive = false;
                 break;
             case ChassisState.OFFROAD:
-                MaxTicks = 2;
+                MaxTicks = 1;
                 Silent = false;
                 Destructive = true;
                 break;
