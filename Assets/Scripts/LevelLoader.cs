@@ -23,6 +23,7 @@ public class LevelLoader : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        ScoreManager.Instance.MaxLevels = Levels.Length;
         string[] levelDef = Regex.Split(Levels[ScoreManager.Instance.CurrentLevel].ToString(), "\r\n");
         int level_x = int.Parse(levelDef[0]);
         int level_y = int.Parse(levelDef[1]);

@@ -109,3 +109,19 @@ USE TOOL      LCTRL  OR    NUMPAD 0
 CONFIGURE BOT  TAB   OR    NUMPAD .
 
        PRESS ANY KEY TO PLAY       
+       
+
+level 1:
+laser
+
+level 2:
+actuator
+
+level 3:
+actuator for switch
+
+level 4:
+probe
+
+level 5:
+offroad chassis
